@@ -3,10 +3,11 @@
 
 ## 구성 요소
 * hypercloud-console ([tmaxcloudck/hypercloud-console](https://hub.docker.com/r/tmaxcloudck/hypercloud-console/tags))
-* 가이드 작성 시점(2020/09/19) 최신 버전은 4.1.4.6 입니다.
+* 가이드 작성 시점(2021/02/19) 최신 버전은 4.1.4.23 입니다.
 
 ## Prerequisites
-* Kubernetes, HyperCloud4 Operator, Grafana, Istio(Kiali, Jaeger), Prometheus, hyperauth가 설치되어 있어야 합니다.
+* Kubernetes, HyperCloud4 Operator, Grafana, Istio(Kiali, Jaeger), Prometheus, hyperauth (keycloak)가 설치되어 있어야 합니다.
+* 설치에 필요한 모듈이 없을 시 설치 가이드 Step에 해당 주소는 0.0.0.0으로 기입합니다. 
 * Kubernetes에 Public IP 여유분이 최소한 1개 있어야 합니다.
 * HCDC 모드로 설치하려는 경우, portal과 동일한 도메인을 사용할 수 있도록 DNS가 세팅되어 있어야 합니다.
 
@@ -17,7 +18,9 @@
     * 작업 디렉토리 생성 및 환경 설정
 	  ```bash
 	  mkdir -p ~/console-install
+      export CONSOLE_HOME=~/console-install 
 	  export CONSOLE_VERSION=4.1.4.1
+      cd $CONSOLE_HOME
 	  ```
 	  
     * 외부 네트워크 통신이 가능한 환경에서 이미지 다운로드
@@ -28,6 +31,8 @@
 	  
     * tar 파일을 폐쇄망 환경으로 이동시킨 후, registry에 이미지 push
 	  ```bash
+      # 이미지 레지스트리 주소 
+      REGISTRY=[IP:PORT]
 	  sudo docker load < console_${CONSOLE_VERSION}.tar
 	  sudo docker tag tmaxcloudck/hypercloud-console:${CONSOLE_VERSION} ${REGISTRY}/tmaxcloudck/hypercloud-console:${CONSOLE_VERSION}
 	  sudo docker push ${REGISTRY}/tmaxcloudck/hypercloud-console:${CONSOLE_VERSION}
@@ -40,12 +45,14 @@
 4. [Deployment (with Pod Template) 생성](#step-4-deployment-with-pod-template-생성)
 5. [동작 확인](#step-5-동작-확인)
 
+## 설치 yaml 파일 
+- 설치에 필요한 yaml 파일들은 manifest 폴더에 있습니다.
 ## Step 1. Namespace, ResourceQuota, ServiceAccount, ClusterRole, ClusterRoleBinding 생성
 * 목적 : console에 필요한 Namespace, ResourceQuota, ServiceAccount, ClusterRole, ClusterRoleBinding을 생성한다.
 * 순서 : 
     1. 작업 폴더에 [1.initialization.yaml](https://raw.githubusercontent.com/tmax-cloud/hypercloud-console4.1/hc-dev/install-yaml/1.initialization.yaml) 파일을 생성하고, `@@NAME_NS@@`들을 모두 원하는 문자열로 교체합니다.
 	    * 이 과정에서 `@@NAME_NS@@` 대신 기입하는 문자열은 console이 설치될 namespace의 이름이 됩니다.
-    2. `kubectl create -f 1.initialization.yaml` 을 실행합니다.
+    2. `kubectl apply -f 1.initialization.yaml` 을 실행합니다.
 
 ## Step 2. Secret (TLS) 생성
 * 목적 : console 웹서버가 https를 지원하게 한다.
@@ -66,7 +73,7 @@
 * 순서 : 
     1. 작업 폴더에 [2.svc-lb.yaml](https://raw.githubusercontent.com/tmax-cloud/hypercloud-console4.1/hc-dev/install-yaml/2.svc-lb.yaml) 파일을 생성하고, `@@NAME_NS@@`를 원하는 문자열로 교체합니다.
 	    * `@@NAME_NS@@` 대신 기입하는 문자열은 Step 1에서와 같아야 합니다.
-    2. `kubectl create -f 2.svc-lb.yaml` 을 실행합니다.
+    2. `kubectl apply -f 2.svc-lb.yaml` 을 실행합니다.
 
 ## Step 4. Deployment (with Pod Template) 생성
 * 목적 : console 웹서버를 호스팅할 pod를 생성한다.
@@ -93,7 +100,7 @@
     | `@@PORTAL@@` | HCDC 모드로 설치하려는 경우 tmaxcloud portal 로그인 페이지 URL 입력 (아닌 경우 행 삭제) | `https://tmaxcloud.com/#!/sign-in` |
     | `@@VER@@` | hypercloud-console 이미지 태그 입력 | `1.1.x.x` |
     
-    * `kubectl create -f 3.deployment-pod.yaml` 을 실행합니다.
+    * `kubectl apply -f 3.deployment.yaml` 을 실행합니다.
 * 비고
     * 폐쇄망에서 설치하는 경우
 	    * image로 `tmaxcloudck/hypercloud-console:1.1.x.x` 대신, `(레포지토리 주소)/tmaxcloudck/hypercloud-console:1.1.x.x` 을 사용합니다.
@@ -114,3 +121,7 @@
 	    * 단, HCDC 모드인 경우에는 IP가 아니라 Domain Name을 통해 접속해야 합니다.
 
 ## 삭제 가이드
+
+## 설치 리소스 제거
+- 목적: `설치된 console 관련 리소스 제거` 
+    - kubectl delete -f ./manifest
