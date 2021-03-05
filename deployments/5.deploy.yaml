@@ -21,7 +21,7 @@ spec:
         - /manager
         args:
         - --pwd=/var/tmp/configs/
-        image: tmaxcloudck/console-operator:5.1.0.1
+        image: tmaxcloudck/console-operator:@@OPERATOR-VER@@
         name: manager
         volumeMounts: 
         - mountPath: /var/tmp/configs
@@ -33,17 +33,14 @@ spec:
         - --base-address=https://0.0.0.0:6443
         - --tls-cert-file=/var/https-cert/cert
         - --tls-key-file=/var/https-cert/key
-        - --keycloak-realm=tmax
-        - --keycloak-auth-url=https://hyperauth.org/auth
-        - --keycloak-client-id=ck-integration-hypercloud5
-        - --mc-mode=true
-        - --grafana-endpoint=http://grafana.monitoring.svc:3000/api/grafana/
-        - --kiali-endpoint=https://kiali.istio-system.220.90.208.239.nip.io/api/kiali/
-        - --kibana-endpoint=https://opendistro-kibana.efk.svc.cluster.local:5601/api/kibana/
-        - --user-auth=hypercloud
-        - --k8s-auth=hypercloud
-        - --release-mode=false
-        image: tmaxcloudck/hypercloud-console:0.5.1.30
+        - --keycloak-realm=@@REALM@@
+        - --keycloak-auth-url=https://@@KEYCLOAK@@/auth
+        - --keycloak-client-id=@@CLIENTID@@
+        - --mc-mode=@@MC-MODE@@
+        - --grafana-endpoint=http://@@GRAFANA@@/api/grafana/
+        - --kiali-endpoint=https://@@KIALI@@/api/kiali/
+        - --kibana-endpoint=https://@@KIBANA@@/api/kibana/
+        image: tmaxcloudck/hypercloud-console:@@CONSOLE-VER@@
         imagePullPolicy: Always
         name: console
         ports:
