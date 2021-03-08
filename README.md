@@ -108,7 +108,7 @@
     * Single Cluster 모드로 설치하는 경우
 	    * 5.deploy.yaml 파일에서 --mc-mode=false (default)로 설정한다. 
     * Multicluster Console을 설치하는 경우
-	    * * 5.deploy.yaml 파일에서 --mc-mode=true (defalt)로 설정한다. 
+	    * 5.deploy.yaml 파일에서 --mc-mode=true 로 설정한다. 
 
 ## Step 5. 동작 확인
 * 목적 : console이 정상적으로 동작하는지 확인한다.
