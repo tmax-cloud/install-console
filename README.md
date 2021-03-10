@@ -50,12 +50,12 @@
 
 ## 설치 가이드
 1. [CRD 생성](#step-1-CRD-생성)
-1. [Namespace, ServiceAccount, ClusterRole, ClusterRoleBinding 생성](#step-2-namespace-serviceaccount-clusterrole-clusterrolebinding-생성)
-2. [Secret (TLS) 생성](#step-3-Job으로-Secret-TLS-생성)
-3. [Service (Load Balancer) 생성](#step-4-service-load-balancer-생성)
-4. [Deployment (with Pod Template) 생성](#step-5-deployment-with-pod-template-생성)
-5. [동작 확인](#step-5-동작-확인)
-6. [번외. 쉘 스크립 이용](#쉘-스크립트로-설치)
+2. [Namespace, ServiceAccount, ClusterRole, ClusterRoleBinding 생성](#step-2-namespace-serviceaccount-clusterrole-clusterrolebinding-생성)
+3. [Secret (TLS) 생성](#step-3-Job으로-Secret-TLS-생성)
+4. [Service (Load Balancer) 생성](#step-4-service-load-balancer-생성)
+5. [Deployment (with Pod Template) 생성](#step-5-deployment-with-pod-template-생성)
+6. [동작 확인](#step-5-동작-확인)
+7. [번외. 쉘 스크립 이용](#쉘-스크립트로-설치)
 
 ## 설치 yaml 파일 
 - 설치에 필요한 yaml 파일들은 deployments 폴더에 있습니다.
@@ -111,6 +111,13 @@
 	    * 5.deploy.yaml 파일에서 --mc-mode=true 로 설정한다. 
 
 
+## Step 5. 동작 확인
+* 목적 : console이 정상적으로 동작하는지 확인한다.
+* 순서 : 
+    1. `kubectl get po -n console-system` 을 실행하여 pod가 running 상태인지 확인합니다.
+    2. `kubectl get svc -n console-system` 을 실행하여 EXTERNAL-IP를 확인합니다.
+    3. `https://EXTERNAL-IP` 로 접속하여 동작을 확인합니다.
+
 ## 쉘 스크립트로 설치
 * 목적: install.sh를 이용하여 console을 설치한다. 
 * 순서: 
@@ -126,13 +133,6 @@
     2. 쉘 스크립트의 실행권한을 부여한 후 실행한다. 
         * `chmod +x install.sh`
         * `./install.sh`
-
-## Step 5. 동작 확인
-* 목적 : console이 정상적으로 동작하는지 확인한다.
-* 순서 : 
-    1. `kubectl get po -n console-system` 을 실행하여 pod가 running 상태인지 확인합니다.
-    2. `kubectl get svc -n console-system` 을 실행하여 EXTERNAL-IP를 확인합니다.
-    3. `https://EXTERNAL-IP` 로 접속하여 동작을 확인합니다.
 
 ## 삭제 가이드
 
