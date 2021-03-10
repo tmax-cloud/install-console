@@ -131,10 +131,12 @@
         export CLIENTID=hypercloud5
         export MC_MODE=true
         ```
-        
+
     2. 쉘 스크립트의 실행권한을 부여한 후 실행한다. 
-        * `chmod +x install.sh`
-        * `./install.sh`
+        ```sh
+        chmod +x install.sh
+        ./install.sh
+        ```
 
 ## 삭제 가이드
 
