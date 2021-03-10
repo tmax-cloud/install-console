@@ -27,8 +27,7 @@ echo "==============================================================="
 echo "STEP 1. ENV Setting"
 echo "==============================================================="
 
-
-KIALI_IP=$(kubectl get ingress -n istio-system -o jsonpath="{.items[*].status.loadBalancer.ingress[*].ip}")
+KIALI_IP=$(kubectl get ingress -A -o jsonpath='{.items[?(@.metadata.namespace=="istio-system")].status.loadBalancer.ingress[0].ip}')
 KIALI_PORT="" # default https port = 433 
 if [ -z $KIALI_IP ]; then
     echo "Cannot find Ingress KIALI_IP in istio-system. Is kiali installed on Ingress?"
@@ -78,7 +77,7 @@ count=0
 stop=20
 while :
 do
-    sleep 4
+    sleep 1
     count=$(($count+1))
     echo "Waiting for $count sec(s)..."
     kubectl get po -l app=console -n ${NAME_NS} 
@@ -86,6 +85,7 @@ do
     if [ ${RUNNING_FLAG} = "Running" ]; then
         echo "Console has been successfully deployed."
         # rm -rf ${temp_Dir}
+        kubectl get svc -n ${NAME_NS}
         break 
     fi
     if [ $count -eq $stop ]; then 
