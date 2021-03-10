@@ -56,6 +56,7 @@
 5. [Deployment (with Pod Template) 생성](#step-5-deployment-with-pod-template-생성)
 6. [동작 확인](#step-5-동작-확인)
 7. [번외. 쉘 스크립 이용](#쉘-스크립트로-설치)
+8. [삭제 가이드](#삭제-가이드)
 
 ## 설치 yaml 파일 
 - 설치에 필요한 yaml 파일들은 deployments 폴더에 있습니다.
@@ -111,7 +112,7 @@
 	    * 5.deploy.yaml 파일에서 --mc-mode=true 로 설정한다. 
 
 
-## Step 5. 동작 확인
+## Step 6. 동작 확인
 * 목적 : console이 정상적으로 동작하는지 확인한다.
 * 순서 : 
     1. `kubectl get po -n console-system` 을 실행하여 pod가 running 상태인지 확인합니다.
