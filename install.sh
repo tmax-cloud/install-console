@@ -13,15 +13,14 @@ KIBANA="opendistro-kibana.efk.svc.cluster.local:5601"
 
 # GET ENV 
 # image version 
-OPERATOR_VER="latest"
-CONSOLE_VER="0.5.1.32"
+OPERATOR_VER=$OPERATOR_VER  # OPERATOR_VER="latest"
+CONSOLE_VER=$CONSOLE_VER    # CONSOLE_VER="0.5.1.32"
 # Necessary to auth 
-REALM="tmax"
-KEYCLOAK="hyperauth.org"
-CLIENTID="ck-integration-hypercloud5"
+REALM=$REALM                # REALM="tmax"
+KEYCLOAK=$KEYCLOAK          # KEYCLOAK="hyperauth.org"
+CLIENTID=$CLIENTID          # CLIENTID="ck-integration-hypercloud5"
 # true = multi cluster mode, false = single cluster mode
-MC_MODE="true"
-
+MC_MODE=$MC_MODE            # MC_MODE="true"
 
 echo "==============================================================="
 echo "STEP 1. ENV Setting"
