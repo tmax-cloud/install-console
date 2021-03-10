@@ -55,7 +55,7 @@
 3. [Service (Load Balancer) 생성](#step-4-service-load-balancer-생성)
 4. [Deployment (with Pod Template) 생성](#step-5-deployment-with-pod-template-생성)
 5. [동작 확인](#step-5-동작-확인)
-번외. [쉘 스크립 이용](#쉘-스크립트로-설치)
+6. [번외. 쉘 스크립 이용](#쉘-스크립트로-설치)
 
 ## 설치 yaml 파일 
 - 설치에 필요한 yaml 파일들은 deployments 폴더에 있습니다.
