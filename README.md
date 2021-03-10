@@ -123,7 +123,7 @@
 * 목적: install.sh를 이용하여 console을 설치한다. 
 * 순서: 
     1. 쉘 스크립트 실행 시 필요한 변수 값들을 설정한다. (변수 값 설명은 [Deployment (with Pod Template) 생성](#step-5-deployment-with-pod-template-생성) 참고)
-        * ```sh
+        ```sh
         export OPERATOR_VER=5.1.x.x
         export CONSOLE_VER=0.5.x.x
         export REALM=tmax
@@ -131,6 +131,7 @@
         export CLIENTID=hypercloud5
         export MC_MODE=true
         ```
+        
     2. 쉘 스크립트의 실행권한을 부여한 후 실행한다. 
         * `chmod +x install.sh`
         * `./install.sh`
