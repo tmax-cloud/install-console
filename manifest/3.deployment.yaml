@@ -39,7 +39,7 @@ spec:
         - --keycloak-realm=@@REALM@@
         - --keycloak-auth-url=https://@@KEYCLOAK@@/auth
         - --keycloak-client-id=@@CLIENTID@@        
-        - --keycloak-use-hidden-iframe=false
+        - --keycloak-use-hidden-iframe=@@HIDDEN@@
         - --hdc-mode=@@HDC_FLAG@@
         - --tmaxcloud-portal=@@PORTAL@@
         image: tmaxcloudck/hypercloud-console:@@VER@@
