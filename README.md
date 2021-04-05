@@ -101,7 +101,7 @@
     | `@@CLIENTID@@` | hyperauth이용하여 로그인 시 필요한 client 정보 입력 | `hypercloud5` | 
     | `@@MC_MODE@@` | Multi Cluster 모드로 설치하려는 경우 `true` 입력 (아닌 경우 행 삭제) | `true` |
     | `@@CONSOLE_VER@@` | hypercloud-console 이미지 태그 입력 | `0.5.x.x` |
-    | `@@GITLAB@@` | 깃랩 주소 입력 (문의 담당자: CK1-2 김성현 연구원) | `http://0.0.0.0/` |
+    | `@@GITLAB@@` | 깃랩 주소 입력, install.sh 에서 자동으로 설치 x, 5.deploy.yaml에 managed-gitlab-url에 직접 입력 | `http://0.0.0.0/` |
     
     * `kubectl apply -f 5.deploy.yaml` 을 실행합니다.
 * 비고
