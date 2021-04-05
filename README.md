@@ -4,8 +4,8 @@
 ## 구성 요소
 * hypercloud-console ([tmaxcloudck/hypercloud-console](https://hub.docker.com/r/tmaxcloudck/hypercloud-console/tags))
 * console-operator ([tmaxcloudck/console-operator](https://hub.docker.com/r/tmaxcloudck/console-operator/tags))
-* 가이드 작성 시점(2021/03/10) 최신 버전은 아래와 같습니다. 
-    * hypercloud-console:0.5.1.32
+* 가이드 작성 시점(2021/04/05) 최신 버전은 아래와 같습니다. 
+    * hypercloud-console:5.1.2.1
     * console-operator:5.1.0.1
 
 ## Prerequisites
