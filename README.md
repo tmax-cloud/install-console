@@ -22,7 +22,7 @@
 	  ```bash
 	  mkdir -p ~/console-install
       export CONSOLE_HOME=~/console-install 
-      export CONSOLE_VERSION=0.5.1.30
+      export CONSOLE_VERSION=5.1.4.1
       export OPERATOR_VERSION=5.1.0.1
       cd $CONSOLE_HOME
 	  ```
@@ -93,7 +93,7 @@
     
     | 문자열 | 상세내용 | 형식예시 |
     | ---- | ---- | ---- |
-    | `@@OPERATOR_VER@@` | hypercloud-console 이미지 태그 입력 | `5.1.x.x` |
+    | `@@OPERATOR_VER@@` | hypercloud-console의 operator 이미지 태그 입력 | `5.1.x.x` |
     | `@@KIALI@@` | `kubectl get ingress -n istio-system kiali` 에서 ADDRESS와 PORT(S) 확인하여 입력 (포트는 `:` 왼쪽 값 사용) | `10.x.x.x:20001` |
     | `@@KIBANA@@` | `kubectl get svc -n kube-logging kibana` 에서 CLUSTER-IP와 PORT(S) 확인하여 입력 (포트는 `:` 왼쪽 값 사용) | `10.x.x.x:80` |
     | `@@REALM@@` | hyperauth이용하여 로그인 시 필요한 정보 입력 | `tmax` |
