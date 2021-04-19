@@ -4,8 +4,8 @@
 ## 구성 요소
 * hypercloud-console ([tmaxcloudck/hypercloud-console](https://hub.docker.com/r/tmaxcloudck/hypercloud-console/tags))
 * console-operator ([tmaxcloudck/console-operator](https://hub.docker.com/r/tmaxcloudck/console-operator/tags))
-* 가이드 작성 시점(2021/04/05) 최신 버전은 아래와 같습니다. 
-    * hypercloud-console:5.1.2.1
+* 가이드 작성 시점(2021/04/19) 최신 버전은 아래와 같습니다. 
+    * hypercloud-console:5.1.4.1
     * console-operator:5.1.0.1
 
 ## Prerequisites
@@ -99,8 +99,8 @@
     | `@@REALM@@` | hyperauth이용하여 로그인 시 필요한 정보 입력 | `tmax` |
     | `@@KEYCLOAK@@` | `kubectl get svc -n hyperauth hyperauth` 에서 EXTERNAL-IP 확인하여 입력 | `10.x.x.x` |
     | `@@CLIENTID@@` | hyperauth이용하여 로그인 시 필요한 client 정보 입력 | `hypercloud5` | 
-    | `@@MC_MODE@@` | Multi Cluster 모드로 설치하려는 경우 `true` 입력 (아닌 경우 행 삭제) | `true` |
-    | `@@CONSOLE_VER@@` | hypercloud-console 이미지 태그 입력 | `0.5.x.x` |
+    | `@@MC_MODE@@` | Multi Cluster 모드로 설치하려는 경우 `true` 입력, Single Cluster 모드로 설치하려는 경우 'false' 입력 | `true` |
+    | `@@CONSOLE_VER@@` | hypercloud-console 이미지 태그 입력 | `5.1.x.x` |
     | `@@GITLAB@@` | 깃랩 주소 입력, install.sh 에서 자동으로 설치 x, 5.deploy.yaml에 managed-gitlab-url에 직접 입력 | `http://0.0.0.0/` |
     
     * `kubectl apply -f 5.deploy.yaml` 을 실행합니다.
@@ -126,7 +126,7 @@
     1. 쉘 스크립트 실행 시 필요한 변수 값들을 설정한다. (변수 값 설명은 [Deployment (with Pod Template) 생성](#step-5-deployment-with-pod-template-생성) 참고)
         ```sh
         export OPERATOR_VER=5.1.x.x
-        export CONSOLE_VER=0.5.x.x
+        export CONSOLE_VER=5.1.x.x
         export REALM=tmax
         export KEYCLOAK=hyperauth.org
         export CLIENTID=hypercloud5
