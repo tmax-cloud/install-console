@@ -10,8 +10,8 @@
 
 ## Prerequisites
 * Kubernetes, HyperCloud5 Operator, hyperauth (Keycloak), Grafana, Prometheus가 설치되어 있어야 합니다.
-* 온전한 화면을 위해 추가로 Istio(Kiali, Jaeger), kibana 설치가 추가로 필요합니다. 
-* 설치에 필요한 모듈이 없을 시 설치 가이드 Step에 해당 주소는 0.0.0.0으로 기입합니다. 
+* 온전한 화면을 위해 추가로 Istio(Kiali, Jaeger), kibana 설치가 추가로 필요합니다.
+* 설치에 필요한 모듈이 없을 시 설치 가이드 [Step](#step-5-deployment-with-pod-template-생성)에 해당 주소는 0.0.0.0으로 기입합니다. 
 * Kubernetes에 Public IP 여유분이 최소한 1개 있어야 합니다.
 
 ## 폐쇄망 구축 가이드
@@ -95,7 +95,7 @@
     | ---- | ---- | ---- |
     | `@@OPERATOR_VER@@` | hypercloud-console 이미지 태그 입력 | `5.1.x.x` |
     | `@@KIALI@@` | `kubectl get ingress -n istio-system kiali` 에서 ADDRESS와 PORT(S) 확인하여 입력 (포트는 `:` 왼쪽 값 사용) | `10.x.x.x:20001` |
-    | `@@KIBANA@@` | `kubectl get svc -n efk opendistro-kibana` 에서 CLUSTER-IP와 PORT(S) 확인하여 입력 (포트는 `:` 왼쪽 값 사용) | `10.x.x.x:80` |
+    | `@@KIBANA@@` | `kubectl get svc -n kube-logging kibana` 에서 CLUSTER-IP와 PORT(S) 확인하여 입력 (포트는 `:` 왼쪽 값 사용) | `10.x.x.x:80` |
     | `@@REALM@@` | hyperauth이용하여 로그인 시 필요한 정보 입력 | `tmax` |
     | `@@KEYCLOAK@@` | `kubectl get svc -n hyperauth hyperauth` 에서 EXTERNAL-IP 확인하여 입력 | `10.x.x.x` |
     | `@@CLIENTID@@` | hyperauth이용하여 로그인 시 필요한 client 정보 입력 | `hypercloud5` | 
