@@ -9,18 +9,31 @@ init_temp="$temp_Dir/2.init.yaml"
 job_temp="$temp_Dir/3.job.yaml"
 svc_temp="$temp_Dir/4.svc-lb.yaml"
 deploy_temp="$temp_Dir/5.deploy.yaml"
-KIBANA="opendistro-kibana.efk.svc.cluster.local:5601"
+# KIBANA="opendistro-kibana.efk.svc.cluster.local:5601"
+KIBANA="kibana.kube-logging.svc.cluster.local:5601"
+KUBEFLOW="0.0.0.0"
+GITLAB="gitlab-test-deploy.ck1-2.192.168.6.151.nip.io"
+OPERATOR_VER="5.1.0.1"
 
 # GET ENV 
 # image version 
-OPERATOR_VER=$OPERATOR_VER  # OPERATOR_VER="latest"
-CONSOLE_VER=$CONSOLE_VER    # CONSOLE_VER="0.5.1.32"
+# OPERATOR_VER=$OPERATOR_VER  # OPERATOR_VER="latest"
+if [ -z $1 ]; then 
+CONSOLE_VER=${VER}
+else 
+CONSOLE_VER=${1}   
+fi 
+echo ${CONSOLE_VER}
 # Necessary to auth 
 REALM=$REALM                # REALM="tmax"
+echo ${REALM}
 KEYCLOAK=$KEYCLOAK          # KEYCLOAK="hyperauth.org"
+echo ${KEYCLOAK}
 CLIENTID=$CLIENTID          # CLIENTID="ck-integration-hypercloud5"
+echo ${CLIENTID}
 # true = multi cluster mode, false = single cluster mode
 MC_MODE=$MC_MODE            # MC_MODE="true"
+echo ${MC_MODE}
 
 echo "==============================================================="
 echo "STEP 1. ENV Setting"
@@ -54,6 +67,8 @@ sed -i "s%@@MC_MODE@@%${MC_MODE}%g" ${deploy_temp}
 
 sed -i "s%@@KIALI@@%${KIALI}%g" ${deploy_temp}
 sed -i "s%@@KIBANA@@%${KIBANA}%g" ${deploy_temp}
+sed -i "s%@@KUBEFLOW@@%${KUBEFLOW}%g" ${deploy_temp}
+sed -i "s%@@GITLAB@@%${GITLAB}%g" ${deploy_temp}
 
 echo "==============================================================="
 echo "STEP 2. Install console"
