@@ -108,7 +108,7 @@
     | `@@KIALI@@` | `kubectl get ingress -n istio-system kiali` 에서 ADDRESS와 PORT(S) 확인하여 입력 (포트는 `:` 왼쪽 값 사용) | `10.x.x.x:20001` |
     | `@@KIBANA@@` | `kubectl get svc -n kube-logging kibana` 에서 CLUSTER-IP와 PORT(S) 확인하여 입력 (포트는 `:` 왼쪽 값 사용) | `10.x.x.x:80` |
     | `@@KUBEFLOW@@` | CLUSTER-IP와 PORT(S) 확인하여 입력 (포트는 `:` 왼쪽 값 사용) | `x.x.x.x` |
-    | `@@GITLAB@@` | " kubectl -n gitlab-system exec -t $(kubectl -n gitlab-system get pod | grep gitlab | awk '{print $1}') -- cat /tmp/shared/omnibus.env 2>/dev/null | grep -oP "external_url '\K[^']*(?=')" 명령어로 해당주소 확인하여 입력 " | `http://0.0.0.0/` |
+    | `@@GITLAB@@` |  비고 참고 | `http://0.0.0.0/` |
     | `@@CONSOLE_VER@@` | hypercloud-console 이미지 태그 입력 | `5.1.x.x` |
     
     * `kubectl apply -f 5.deploy.yaml` 을 실행합니다.
@@ -119,6 +119,8 @@
 	    * 5.deploy.yaml 파일에서 --mc-mode=false (default)로 설정한다. 
     * Multicluster Console을 설치하는 경우
 	    * 5.deploy.yaml 파일에서 --mc-mode=true 로 설정한다. 
+    * GITLAB 주소 조회 
+            *  ``` kubectl -n gitlab-system exec -t $(kubectl -n gitlab-system get pod | grep gitlab | awk '{print $1}') -- cat /tmp/shared/omnibus.env 2>/dev/null | grep -oP "external_url '\K[^']*(?=')" ```
 
 
 ## Step 6. 동작 확인
