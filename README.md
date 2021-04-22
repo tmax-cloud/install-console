@@ -108,7 +108,7 @@
     | `@@KIALI@@` | `kubectl get ingress -n istio-system kiali` 에서 ADDRESS와 PORT(S) 확인하여 입력 (포트는 `:` 왼쪽 값 사용) | `10.x.x.x:20001` |
     | `@@KIBANA@@` | `kubectl get svc -n kube-logging kibana` 에서 CLUSTER-IP와 PORT(S) 확인하여 입력 (포트는 `:` 왼쪽 값 사용) | `10.x.x.x:80` |
     | `@@KUBEFLOW@@` | CLUSTER-IP와 PORT(S) 확인하여 입력 (포트는 `:` 왼쪽 값 사용) | `x.x.x.x` |
-    | `@@GITLAB@@` | 깃랩 주소 입력, install.sh 에서 자동으로 설치 x, 5.deploy.yaml에 managed-gitlab-url에 직접 입력 | `http://0.0.0.0/` |
+    | `@@GITLAB@@` | kubectl -n gitlab-system exec -t $(kubectl -n gitlab-system get pod | grep gitlab | awk '{print $1}') -- cat /tmp/shared/omnibus.env 2>/dev/null | grep -oP "external_url '\K[^']*(?=')" 명령어로 해당주소 확인하여 입력 | `http://0.0.0.0/` |
     | `@@CONSOLE_VER@@` | hypercloud-console 이미지 태그 입력 | `5.1.x.x` |
     
     * `kubectl apply -f 5.deploy.yaml` 을 실행합니다.
