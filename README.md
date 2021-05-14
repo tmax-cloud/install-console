@@ -100,7 +100,7 @@
     
     | 문자열             | 상세내용                                                                                                                                                      | 형식예시         |
     | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
-    | `@@OPERATOR_VER@@` | hypercloud-console 이미지 태그 입력                                                                                                                           | `5.0.x.x`        |
+    | `@@OPERATOR_VER@@` | hypercloud-console 이미지 태그 입력                                                                                                                           | `5.1.x.x`        |
     | `@@REALM@@`        | hyperauth이용하여 로그인 시 필요한 정보 입력                                                                                                                  | `tmax`           |
     | `@@KEYCLOAK@@`     | `kubectl get svc -n hyperauth hyperauth` 에서 EXTERNAL-IP 확인하여 입력                                                                                       | `10.x.x.x`       |
     | `@@CLIENTID@@`     | hyperauth이용하여 로그인 시 필요한 client 정보 입력                                                                                                           | `hypercloud5`    |
@@ -109,7 +109,7 @@
     | `@@KIBANA@@`       | `kubectl get svc -n kube-logging kibana` 에서 CLUSTER-IP와 PORT(defalut 5601) 확인하여 입력 (포트는 `:` 왼쪽 값 사용)                                         | `10.x.x.x:5601`  |
     | `@@KUBEFLOW@@`     | `kubectl svc -n istio-system istio-ingressgateway`에서 CLUSTER-IP 확인하여 입력 (http 기본 포트 사용)                                                         | `10.x.x.x`       |
     | `@@GITLAB@@`       | 비고 참고                                                                                                                                                     | `http://gitlab/` |
-    | `@@CONSOLE_VER@@`  | hypercloud-console 이미지 태그 입력                                                                                                                           | `0.5.x.x`        |
+    | `@@CONSOLE_VER@@`  | hypercloud-console 이미지 태그 입력                                                                                                                           | `5.0.x.x`        |
     
     * `kubectl apply -f 5.deploy.yaml` 을 실행합니다.
 * 비고
