@@ -4,8 +4,8 @@
 ## 구성 요소
 * hypercloud-console ([tmaxcloudck/hypercloud-console](https://hub.docker.com/r/tmaxcloudck/hypercloud-console/tags))
 * console-operator ([tmaxcloudck/console-operator](https://hub.docker.com/r/tmaxcloudck/console-operator/tags))
-* 가이드 작성 시점(2021/05/13) 최신 버전은 아래와 같습니다. 
-    * hypercloud-console:5.0.10.0
+* 가이드 작성 시점(2021/05/31) 최신 버전은 아래와 같습니다. 
+    * hypercloud-console:5.0.12.0
     * console-operator:5.1.0.1
 
 ## Prerequisites
@@ -22,7 +22,7 @@
 	  ```bash
 	  mkdir -p ~/console-install
       export CONSOLE_HOME=~/console-install 
-      export CONSOLE_VERSION=5.0.10.0
+      export CONSOLE_VERSION=5.0.12.0
       export OPERATOR_VERSION=5.1.0.1
       cd $CONSOLE_HOME
 	  ```
@@ -114,7 +114,7 @@
     * `kubectl apply -f 5.deploy.yaml` 을 실행합니다.
 * 비고
     * 폐쇄망에서 설치하는 경우
-	    * image로 `tmaxcloudck/hypercloud-console:1.1.x.x` 대신, `(레포지토리 주소)/tmaxcloudck/hypercloud-console:1.1.x.x` 을 사용합니다.
+	    * image로 `tmaxcloudck/hypercloud-console:5.0.12.0` 대신, `(레포지토리 주소)/tmaxcloudck/hypercloud-console:5.0.12.0` 을 사용합니다.
     * Single Cluster 모드로 설치하는 경우
 	    * 5.deploy.yaml 파일에서 --mc-mode=false (default)로 설정한다. 
     * Multicluster Console을 설치하는 경우
@@ -135,8 +135,8 @@
 * 순서: 
     1. 쉘 스크립트 실행 시 필요한 변수 값들을 설정한다. (변수 값 설명은 [Deployment (with Pod Template) 생성](#step-5-deployment-with-pod-template-생성) 참고)
         ```sh
-        export OPERATOR_VER=5.1.x.x
-        export CONSOLE_VER=5.0.x.x
+        export OPERATOR_VER=5.1.0.1
+        export CONSOLE_VER=5.0.12.0
         export REALM=tmax
         export KEYCLOAK=hyperauth.org
         export CLIENTID=hypercloud5
