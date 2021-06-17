@@ -31,8 +31,11 @@
 	  ```bash
 	  sudo docker pull  tmaxcloudck/hypercloud-console:${CONSOLE_VERSION}
 	  sudo docker save tmaxcloudck/hypercloud-console:${CONSOLE_VERSION} > console_${CONSOLE_VERSION}.tar
-      sudo docker pull  tmaxcloudck/console-operator:${OPERATOR_VERSION}
+      	  sudo docker pull  tmaxcloudck/console-operator:${OPERATOR_VERSION}
 	  sudo docker save tmaxcloudck/hypercloud-console:${OPERATOR_VERSION} > operator_${OPERATOR_VERSION}.tar
+	  # tls 인증서 생성을 위한 도커 이미지 
+	  sudo docker pull jettech/kube-webhook-certgen:v1.3.0
+	  sudo docker save jettech/kube-webhook-certgen:v1.3.0 > certgen_v1.3.0.tar
 	  ```
 	  
     * tar 파일을 폐쇄망 환경으로 이동시킨 후, registry에 이미지 push
@@ -43,9 +46,14 @@
 	  sudo docker tag tmaxcloudck/hypercloud-console:${CONSOLE_VERSION} ${REGISTRY}/tmaxcloudck/hypercloud-console:${CONSOLE_VERSION}
 	  sudo docker push ${REGISTRY}/tmaxcloudck/hypercloud-console:${CONSOLE_VERSION}
 
-      sudo docker load < operator_${OPERATOR_VERSION}.tar
+          sudo docker load < operator_${OPERATOR_VERSION}.tar
 	  sudo docker tag tmaxcloudck/console-operator:${OPERATOR_VERSION} ${REGISTRY}/tmaxcloudck/console-operator:${OPERATOR_VERSION}
 	  sudo docker push ${REGISTRY}/tmaxcloudck/console-operator:${OPERATOR_VERSION}
+	  
+	  #tls 인증서 생성을 위한 도커 이미지 로드 
+	  sudo docker load < certgen_v1.3.0.tar
+	  sudo docker tag jettech/kube-webhook-certgen:v1.3.0 ${REGISTRY}/jettech/kube-webhook-certgen:v1.3.0
+	  sudo docker push ${REGISTRY}/jettech/kube-webhook-certgen:v1.3.0
 	  ```
 
 ## 설치 가이드
@@ -86,6 +94,9 @@
 * 순서 : 
     1. deployments 폴더 안의 [3.job.yaml](https://raw.githubusercontent.com/tmax-cloud/install-console/5.0/deployments/3.job.yaml) 파일을 실행한다. 
 	   * `kubectl apply -f 3.job.yaml`
+* 비고 : 
+    * 폐쇄망에서 설치하는 경우 
+	    * image로 `jettech/kube-webhook-certgen:v1.3.0` 대신, `(레포지토리 주소)/jettech/kube-webhook-certgen:v1.3.0` 을 사용합니다.	  
 
 ## Step 4. Service (Load Balancer) 생성
 * 목적 : 브라우저를 통해 console에 접속할 수 있게 한다.
