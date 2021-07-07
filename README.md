@@ -69,9 +69,10 @@
   - [Step 4. Service (Load Balancer) 생성](#step-4-service-load-balancer-생성)
   - [Step 5. Deployment (with Pod Template) 생성](#step-5-deployment-with-pod-template-생성)
   - [Step 6. 동작 확인](#step-6-동작-확인)
-  - [쉘 스크립트로 설치](#쉘-스크립트로-설치)
   - [삭제 가이드](#삭제-가이드)
-  - [설치 리소스 제거](#설치-리소스-제거)
+  - [쉘 스크립트로 설치](#쉘-스크립트로-설치)
+  - [쉘 스크립트로 설치](#쉘-스크립트로-삭제)
+  - [쉘 스크립트로 설치](#쉘-스크립트로-폐쇄망-구축)
 
 ## 설치 yaml 파일 
 - 설치에 필요한 yaml 파일들은 deployments 폴더에 있습니다.
@@ -141,7 +142,7 @@
     2. `kubectl get svc -n console-system` 을 실행하여 EXTERNAL-IP를 확인합니다.
     3. `https://EXTERNAL-IP` 로 접속하여 동작을 확인합니다.
 
-## 삭제가이드. 
+## 삭제 가이드
 * 목적: `console을 삭제한다.`
 * 순서: 아래 kubectl 명령어로 console 구성 요소를 삭제한다. 
     * `kubectl delete ns console-system`
@@ -165,7 +166,7 @@
         ./installer.sh uninstall
         ```
 
-## 쉘 스크립트로 폐쇄망 설치 
+## 쉘 스크립트로 폐쇄망 구축 
 * 목적: `installer.sh를 이용하여 폐쇄망에 console을 설치한다.`
 * 순서:
     1. manifest 폴더로 이동한 후 installer.sh 이용하여 필요한 이미지를 준비한다. 
