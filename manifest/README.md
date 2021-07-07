@@ -2,7 +2,7 @@
 
 ## 전체 설치
 * 작업 디렉토리 및 환경 설정 
-   '''sh
+   '''bash
       git clone https://github.com/tmax-cloud/install-console.git -b 5.0 --single-branch 
       cd install-console/manifest 
    '''
