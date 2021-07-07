@@ -94,8 +94,6 @@ function install(){
   # Inject ENV into yaml
   rm -rf $temp_Dir
   cp -r $file_Dir $temp_Dir
-  sed -i "s%@@OPERATOR_VER@@%${OPERATOR_VER}%g" "${deploy_temp}"
-  sed -i "s%@@CONSOLE_VER@@%${CONSOLE_VER}%g" "${deploy_temp}"
 
   sed -i "s%@@CLIENTID@@%${CLIENTID}%g" "${deploy_temp}"
   sed -i "s%@@KEYCLOAK@@%${KEYCLOAK}%g" "${deploy_temp}"
@@ -109,9 +107,12 @@ function install(){
   sed -i "s%@@GITLAB@@%${GITLAB}%g" "${deploy_temp}"
 
   if [[ "$REGISTRY" != "" ]]; then
-  sed -i "s%docker.io%$REGISTRY/docker.io%g" "${job_temp}"
-  sed -i "s%tmaxcloudck%$REGISTRY/tmaxcloudck%g" "${deploy_temp}"
-  sed -i "s%tmaxcloudck%$REGISTRY/tmaxcloudck%g" "${deploy_temp}"
+    sed -i "s%docker.io%$REGISTRY/docker.io%g" "${job_temp}"
+    sed -i "s%tmaxcloudck%$REGISTRY/tmaxcloudck%g" "${deploy_temp}"
+    sed -i "s%tmaxcloudck%$REGISTRY/tmaxcloudck%g" "${deploy_temp}"
+  else 
+    sed -i "s%@@OPERATOR_VER@@%${OPERATOR_VER}%g" "${deploy_temp}"
+    sed -i "s%@@CONSOLE_VER@@%${CONSOLE_VER}%g" "${deploy_temp}"
   fi
 
   if [[ "$RELEASE_MODE" == "false" ]]; then
