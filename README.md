@@ -141,27 +141,45 @@
     2. `kubectl get svc -n console-system` 을 실행하여 EXTERNAL-IP를 확인합니다.
     3. `https://EXTERNAL-IP` 로 접속하여 동작을 확인합니다.
 
+## 삭제가이드. 
+* 목적: `console을 삭제한다.`
+* 순서: 아래 kubectl 명령어로 console 구성 요소를 삭제한다. 
+    * `kubectl delete ns console-system`
+
 ## 쉘 스크립트로 설치
-* 목적: install.sh를 이용하여 console을 설치한다. 
+* 목적: `installer.sh를 이용하여 console을 설치한다.`
 * 순서: 
-    1. 쉘 스크립트 실행 시 필요한 변수 값들을 설정한다. (변수 값 설명은 [Deployment (with Pod Template) 생성](#step-5-deployment-with-pod-template-생성) 참고)
-        ```sh
-        export OPERATOR_VER=5.1.0.1
-        export CONSOLE_VER=5.0.12.0
-        export REALM=tmax
-        export KEYCLOAK=hyperauth.org
-        export CLIENTID=hypercloud5
-        export MC_MODE=true
-        ```
+    1. manifest 폴더 안의 console.config정보를 설정한다. 
 
     2. 쉘 스크립트의 실행권한을 부여한 후 실행한다. 
         ```sh
-        chmod +x install.sh
-        ./install.sh
+        chmod +x installer.sh
+        ./installer.sh install
+        ```
+## 쉘 스크립트로 삭제 
+* 목적: `installer.sh를 이용하여 console을 삭제한다.`
+* 순서:
+    1. manifest 폴더로 이동한다. 
+    2. installer.sh 이용하여 console 구성요소를 삭제한다. 
+        ```sh
+        ./installer.sh uninstall
         ```
 
-## 삭제 가이드
-
-## 설치 리소스 제거
-- 목적: `설치된 console 관련 리소스 제거` 
-    - kubectl delete -f ./deployments
+## 쉘 스크립트로 폐쇄망 설치 
+* 목적: `installer.sh를 이용하여 폐쇄망에 console을 설치한다.`
+* 순서:
+    1. manifest 폴더로 이동한 후 installer.sh 이용하여 필요한 이미지를 준비한다. 
+        ```sh 
+        cd install-console/manifest
+        ./installer.sh prepare-online
+    2. 폐쇄망 환경으로 전송한다. 
+        ```sh 
+         #생성된 파일 모두 scp명령어 또는 물리 매체를 통해 폐쇄망 환경으로 복사 
+        cd ../..
+        scp -r install-console <REMOTE_SERVER>:<PATH>
+        ```
+    3. manifest 폴더로 이동한 후 console.config 파일에 REGISTRY 항목에 폐쇄망 주소를 입력한다.  
+    4. installer.sh를 이용하여 폐쇄망 환경의 registry에 이미지를 push한다. 
+        ``` sh 
+        ./installer.sh prepare-offline
+        ```
