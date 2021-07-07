@@ -1,6 +1,11 @@
 # Installer 사용 방법
 
 ## 전체 설치
+* 작업 디렉토리 및 환경 설정 
+   '''sh
+      git clone https://github.com/tmax-cloud/install-console.git -b 5.0 --single-branch 
+      cd install-console/manifest 
+   '''
 ### 공통
 1. console.config 설정
    - REGISTRY: 레지스트리 주소 입력 (폐쇄망이 아닐 경우 빈 값으로 설정)
