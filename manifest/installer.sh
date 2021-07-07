@@ -8,11 +8,11 @@ function prepare_online(){
   echo  "========================================================================="
   echo  "========================  Preparing for Console =========================="
   echo  "========================================================================="
-  sudo docker pull "tmaxcloudck/hypercloud-console:${CONSOLE_VERSION}"
-  sudo docker save "tmaxcloudck/hypercloud-console:${CONSOLE_VERSION}" > "${install_dir}/tar/console_${CONSOLE_VERSION}.tar"
+  sudo docker pull "tmaxcloudck/hypercloud-console:${CONSOLE_VER}"
+  sudo docker save "tmaxcloudck/hypercloud-console:${CONSOLE_VER}" > "${install_dir}/tar/console_${CONSOLE_VER}.tar"
 
-	sudo docker pull "tmaxcloudck/console-operator:${OPERATOR_VERSION}"
-  sudo docker save "tmaxcloudck/hypercloud-console:${OPERATOR_VERSION}" > "${install_dir}/tar/operator_${OPERATOR_VERSION}.tar"
+	sudo docker pull "tmaxcloudck/console-operator:${OPERATOR_VER}"
+  sudo docker save "tmaxcloudck/hypercloud-console:${OPERATOR_VER}" > "${install_dir}/tar/operator_${OPERATOR_VER}.tar"
 
   sudo docker pull "jettech/kube-webhook-certgen:v1.3.0"
   sudo docker save "jettech/kube-webhook-certgen:v1.3.0" > "${install_dir}/tar/certgen_v1.3.0.tar"
@@ -23,13 +23,13 @@ function prepare_offline(){
   echo  "========================  Preparing for Console =========================="
   echo  "========================================================================="
 
-  sudo docker load < ${install_dir}/tar/console_${CONSOLE_VERSION}.tar
-  sudo docker tag tmaxcloudck/hypercloud-console:${CONSOLE_VERSION} ${REGISTRY}/tmaxcloudck/hypercloud-console:${CONSOLE_VERSION}
-  sudo docker push ${REGISTRY}/tmaxcloudck/hypercloud-console:${CONSOLE_VERSION}
+  sudo docker load < ${install_dir}/tar/console_${CONSOLE_VER}.tar
+  sudo docker tag tmaxcloudck/hypercloud-console:${CONSOLE_VER} ${REGISTRY}/tmaxcloudck/hypercloud-console:${CONSOLE_VER}
+  sudo docker push ${REGISTRY}/tmaxcloudck/hypercloud-console:${CONSOLE_VER}
 
-  sudo docker load < ${install_dir}/tar/operator_${OPERATOR_VERSION}.tar
-  sudo docker tag tmaxcloudck/console-operator:${OPERATOR_VERSION} ${REGISTRY}/tmaxcloudck/console-operator:${OPERATOR_VERSION}
-  sudo docker push ${REGISTRY}/tmaxcloudck/console-operator:${OPERATOR_VERSION}
+  sudo docker load < ${install_dir}/tar/operator_${OPERATOR_VER}.tar
+  sudo docker tag tmaxcloudck/console-operator:${OPERATOR_VER} ${REGISTRY}/tmaxcloudck/console-operator:${OPERATOR_VER}
+  sudo docker push ${REGISTRY}/tmaxcloudck/console-operator:${OPERATOR_VER}
 
   #tls 인증서 생성을 위한 도커 이미지 로드
   sudo docker load < ${install_dir}/tar/certgen_v1.3.0.tar
