@@ -24,16 +24,16 @@ function prepare_offline(){
   echo  "========================================================================="
 
   sudo docker load < ${install_dir}/tar/console_${CONSOLE_VER}.tar
-  sudo docker tag dockerio/tmaxcloudck/hypercloud-console:${CONSOLE_VER} ${REGISTRY}/tmaxcloudck/hypercloud-console:${CONSOLE_VER}
+  sudo docker tag docker.io/tmaxcloudck/hypercloud-console:${CONSOLE_VER} ${REGISTRY}/tmaxcloudck/hypercloud-console:${CONSOLE_VER}
   sudo docker push ${REGISTRY}/tmaxcloudck/hypercloud-console:${CONSOLE_VER}
 
   sudo docker load < ${install_dir}/tar/operator_${OPERATOR_VER}.tar
-  sudo docker tag dockerio/tmaxcloudck/console-operator:${OPERATOR_VER} ${REGISTRY}/tmaxcloudck/console-operator:${OPERATOR_VER}
+  sudo docker tag docker.io/tmaxcloudck/console-operator:${OPERATOR_VER} ${REGISTRY}/tmaxcloudck/console-operator:${OPERATOR_VER}
   sudo docker push ${REGISTRY}/tmaxcloudck/console-operator:${OPERATOR_VER}
 
   #tls 인증서 생성을 위한 도커 이미지 로드
   sudo docker load < ${install_dir}/tar/certgen_v1.3.0.tar
-  sudo docker tag dockerio/jettech/kube-webhook-certgen:v1.3.0 ${REGISTRY}/jettech/kube-webhook-certgen:v1.3.0
+  sudo docker tag docker.io/jettech/kube-webhook-certgen:v1.3.0 ${REGISTRY}/jettech/kube-webhook-certgen:v1.3.0
   sudo docker push ${REGISTRY}/jettech/kube-webhook-certgen:v1.3.0
 }
 
