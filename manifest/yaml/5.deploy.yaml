@@ -34,6 +34,7 @@ spec:
             - --kibana-endpoint=http://@@KIBANA@@/api/kibana/
             - --kubeflow-endpoint=http://@@KUBEFLOW@@/api/kubeflow/
             - --managed-gitlab-url=@@GITLAB@@
+            - --registry-url=@@HYPERREGISTRY@@
           image: tmaxcloudck/hypercloud-console:@@CONSOLE_VER@@
           imagePullPolicy: Always
           name: console

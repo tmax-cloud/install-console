@@ -91,6 +91,11 @@ function install(){
     fi
   fi
 
+  if [[ $HYPERREGISTRY == "" ]]; then
+      echo "HYPERREGISTRY=http://0.0.0.0"
+      HYPERREGISTRY="http://0.0.0.0/"
+  fi
+  
   # Inject ENV into yaml
   rm -rf $temp_Dir
   cp -r $file_Dir $temp_Dir
@@ -108,6 +113,7 @@ function install(){
   sed -i "s%@@KIBANA@@%${KIBANA}%g" "${deploy_temp}"
   sed -i "s%@@KUBEFLOW@@%${KUBEFLOW}%g" "${deploy_temp}"
   sed -i "s%@@GITLAB@@%${GITLAB}%g" "${deploy_temp}"
+  sed -i "s%@@HYPERREGISTRY@@%${HYPERREGISTRY}%g" "${deploy_temp}"
 
   if [[ "$REGISTRY" != "" ]]; then
     sed -i "s%docker.io%$REGISTRY/docker.io%g" "${job_temp}"
