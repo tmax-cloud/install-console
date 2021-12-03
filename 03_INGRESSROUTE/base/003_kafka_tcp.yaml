@@ -17,8 +17,6 @@ spec:
         - name: kafka-1
           namespace: hyperauth
           port: 9093
-          scheme: https
-          serversTransport: insecure@file
   tls: {}
 ---
 apiVersion: traefik.containo.us/v1alpha1
@@ -39,8 +37,6 @@ spec:
         - name: kafka-2
           namespace: hyperauth
           port: 9093
-          scheme: https
-          serversTransport: insecure@file
   tls: {}
 ---
 apiVersion: traefik.containo.us/v1alpha1
@@ -61,6 +57,4 @@ spec:
         - name: kafka-3
           namespace: hyperauth
           port: 9093
-          scheme: https
-          serversTransport: insecure@file
   tls: {}
