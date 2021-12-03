@@ -1,0 +1,53 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: hypercloud-stripprefix
+  namespace: api-gateway-system
+spec:
+  stripPrefix:
+    prefixes:
+      - "/api/hypercloud"
+      - "/api/multi-hypercloud"
+      - "/api/webhook"
+    # forceSlash: true
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: kubernetes-stripprefix
+  namespace: api-gateway-system
+spec:
+  stripPrefix:
+    prefixes:
+      - "/api/kubernetes"
+    forceSlash: true
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: monitoring-stripprefix
+  namespace: api-gateway-system
+spec:
+  stripPrefix:
+    prefixes:
+      - "/api/prometheus"
+      - "/api/alertmanager"
+    # forceSlash: true
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: monitoring-stripprefix-tenancy
+  namespace: api-gateway-system
+spec:
+  stripPrefix:
+    prefixes:
+      - "/api/prometheus-tenancy"
+---
+
+
+
+
+
+

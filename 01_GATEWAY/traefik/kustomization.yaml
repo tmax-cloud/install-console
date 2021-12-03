@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+#  - 003_config.yaml
+resources:
+- 001_serviceaccount.yaml
+- 002_certificate.yaml
+- 002_ingressclass.yaml
+- 004_deploy.yaml
+- 005_service.yaml
+namespace: api-gateway-system
+commonLabels:
+  app.kubernetes.io/instance: traefik
+  app.kubernetes.io/managed-by: tmax-cloud
+  app.kubernetes.io/name: api-gateway
+images:
+- name: tmaxcloudck/jwt-decode
+  newName: docker.io/tmaxcloudck/jwt-decode
+  newTag: 5.0.0.1
+- name: traefik
+  newName: docker.io/library/traefik
+  newTag: v2.5.4
+configMapGenerator:
+- behavior: create
+  files:
+  - traefik.yml
+  name: gateway-config

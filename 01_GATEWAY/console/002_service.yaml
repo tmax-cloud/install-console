@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: console-service
+  namespace: api-gateway-system
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/instance: console
+    app.kubernetes.io/name: api-gateway
+    app.kubernetes.io/managed-by: tmax-cloud
+  ports:
+  - port: 31303
+    targetPort: console
+    name: console

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/instance: console
+    app.kubernetes.io/name: api-gateway
+    app.kubernetes.io/managed-by: tmax-cloud
+  name: console-deploy
+  namespace: api-gateway-system
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: console
+      app.kubernetes.io/name: api-gateway
+      app.kubernetes.io/managed-by: tmax-cloud
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: console
+        app.kubernetes.io/managed-by: tmax-cloud
+        app.kubernetes.io/name: api-gateway
+    spec:
+      containers:
+        - name: console
+          command:
+            - /opt/bridge/bin/console
+            - server
+            - --public-dir=/opt/bridge/static
+            - --listen=http://0.0.0.0:31303
+            - --base-address=http://0.0.0.0:31303
+            - --keycloak-realm=tmax
+            - --keycloak-auth-url=https://@@HYPERAUTH@@/auth
+            - --keycloak-client-id=hypercloud5
+            - --mc-mode=true
+            - --release-mode=true
+          image: tmaxcloudck/hypercloud-console:5.0.36.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 31303
+              protocol: TCP
+              name: console
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File

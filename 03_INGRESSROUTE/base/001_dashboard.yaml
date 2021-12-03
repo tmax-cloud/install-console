@@ -1,0 +1,22 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  labels:
+    app.kubernetes.io/instance: traefik
+    app.kubernetes.io/managed-by: tmax-cloud
+    app.kubernetes.io/name: api-gateway
+  name: dashboard-ingressroute
+  namespace: api-gateway-system
+spec:
+  entryPoints:
+    - traefik
+  routes:
+    - match: PathPrefix(`/api`, `/dashboard`, `/`) && Host(`dashboard.@@DNS@@`)
+      kind: Rule
+      services:
+        - name: api@internal
+          kind: TraefikService
+      middlewares:
+        - name: dashboard-auth@file
+  tls: {} # use default tls
