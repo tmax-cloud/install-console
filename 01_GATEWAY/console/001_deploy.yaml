@@ -43,3 +43,4 @@ spec:
               name: console
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
+      serviceAccountName: api-gateway
