@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# hyperauth.org 도메인 이름을 다른 이름으로 변경해서 사용 예) export HYPERAUTH=auth.tmaxcloudauth.org
+export HYPERAUTH=hyperauth.org
+
 make deploy-init
 sleep 10
 make deploy-traefik
