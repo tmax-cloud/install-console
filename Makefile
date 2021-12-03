@@ -33,7 +33,7 @@ deploy-console: kustomize
 	#sed -i s/@@CONSOLE@@/$(CONSOLE)/g ./01_GATEWAY/console/003_ingressroute.yaml
 	sed -i s/@@DNS@@/$(DNS)/g ./01_GATEWAY/console/003_ingressroute.yaml
 	cd 01_GATEWAY/console && $(KUSTOMIZE) edit set image tmaxcloudck/hypercloud-console=${CONSOLE_IMG}
-	$(KUSTOMIZE) build ./01_GATEWAY/console/ # | kubectl apply -f -
+	$(KUSTOMIZE) build ./01_GATEWAY/console/ | kubectl apply -f -
 	sed -i s/$(HYPERAUTH)/@@HYPERAUTH@@/g ./01_GATEWAY/console/001_deploy.yaml
 	#sed -i s/$(CONSOLE)/@@CONSOLE@@/g ./01_GATEWAY/console/003_ingressroute.yaml
 	sed -i s/$(DNS)/@@DNS@@/g ./01_GATEWAY/console/003_ingressroute.yaml
@@ -43,7 +43,7 @@ undeploy-console:
 
 deploy-tls-acme-route53: kustomize
 	sed -i s/@@DNS@@/$(DNS)/g ./02_GATEWAY_TLS/acme_route53/002_certificate.yaml
-	#$(KUSTOMIZE) build ./02_GATEWAY_TLS/acme_route53/
+	# $(KUSTOMIZE) build ./02_GATEWAY_TLS/acme_route53/
 	$(KUSTOMIZE) build ./02_GATEWAY_TLS/acme_route53/ | kubectl apply -f -
 	sed -i s/$(DNS)/@@DNS@@/g ./02_GATEWAY_TLS/acme_route53/002_certificate.yaml
 

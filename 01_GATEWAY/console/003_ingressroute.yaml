@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: console
     app.kubernetes.io/managed-by: tmax-cloud
     app.kubernetes.io/name: api-gateway
-  name: console-ingressroute-jinsoo
+  name: console-ingressroute
   namespace: api-gateway-system
 spec:
   entryPoints:
