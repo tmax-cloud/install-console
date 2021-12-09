@@ -1,0 +1,21 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: k8s-ingressroute
+  namespace: api-gateway-system
+spec:
+  entryPoints:
+    - k8s
+  routes:
+    - kind: Rule
+      match: PathPrefix(`/`) && Host(`kubernetes.{{DOMAIN_NAME}}`)
+      services:
+        - name: kubernetes
+          namespace: default
+          port: https
+          scheme: https
+          serversTransport: kubernetes@file
+  tls: {}
+---
+

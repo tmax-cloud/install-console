@@ -1,0 +1,13 @@
+## https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- 000_namespace.yaml
+- 001_crd.yaml
+- 002_clusterissuer_selfsigned.yaml
+- 003_certificate_tmaxcloud.yaml
+- 004_clusterissuer_tmaxcloud.yaml
+commonLabels:
+  app.kubernetes.io/component: init
+  app.kubernetes.io/managed-by: tmax-cloud
+  app.kubernetes.io/part-of: api-gateway

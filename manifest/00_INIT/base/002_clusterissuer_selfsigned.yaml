@@ -1,0 +1,7 @@
+## ref https://cert-manager.io/next-docs/reference/api-docs/#cert-manager.io%2fv1alpha3
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: tmaxcloud-selfsigned
+spec:
+  selfSigned: {}

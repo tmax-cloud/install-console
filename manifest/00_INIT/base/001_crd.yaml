@@ -1,0 +1,1440 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: ingressroutes.traefik.containo.us
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.6.2
+spec:
+  group: traefik.containo.us
+  names:
+    kind: IngressRoute
+    listKind: IngressRouteList
+    plural: ingressroutes
+    singular: ingressroute
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        type: object
+        description: IngressRoute is an Ingress CRD specification.
+        properties:
+          apiVersion:
+            type: string
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+          kind:
+            type: string
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+          metadata:
+            type: object
+          spec:
+            type: object
+            description: IngressRouteSpec is a specification for a IngressRouteSpec resource.
+            properties:
+              entryPoints:
+                type: array
+                items:
+                  type: string
+              routes:
+                type: array
+                items:
+                  type: object
+                  description: Route contains the set of routes.
+                  properties:
+                    kind:
+                      type: string
+                      enum:
+                      - Rule
+                    priority:
+                      type: integer
+                    match:
+                      type: string
+                    middlewares:
+                      type: array
+                      items:
+                        type: object
+                        description: MiddlewareRef is a ref to the Middleware resources.
+                        properties:
+                          name:
+                            type: string
+                          namespace:
+                            type: string
+                        required:
+                        - name
+                    services:
+                      type: array
+                      items:
+                        type: object
+                        description: Service defines an upstream to proxy traffic.
+                        properties:
+                          name:
+                            type: string
+                            description: Name is a reference to a Kubernetes Service object (for a load-balancer of servers), or to a TraefikService object (service load-balancer, mirroring, _etc). The differentiation between the two is specified in the Kind field.
+                          namespace:
+                            type: string
+                          kind:
+                            type: string
+                            enum:
+                            - Service
+                            - TraefikService
+                          strategy:
+                            type: string
+                          port:
+                            anyOf:
+                            - type: integer
+                            - type: string
+                            x-kubernetes-int-or-string: true
+                          passHostHeader:
+                            type: boolean
+                          responseForwarding:
+                            type: object
+                            description: ResponseForwarding holds configuration for the forward of the response.
+                            properties:
+                              flushInterval:
+                                type: string
+                          scheme:
+                            type: string
+                          serversTransport:
+                            type: string
+                          sticky:
+                            type: object
+                            description: Sticky holds the sticky configuration.
+                            properties:
+                              cookie:
+                                type: object
+                                description: Cookie holds the sticky configuration based on cookie.
+                                properties:
+                                  name:
+                                    type: string
+                                  httpOnly:
+                                    type: boolean
+                                  sameSite:
+                                    type: string
+                                  secure:
+                                    type: boolean
+                          weight:
+                            type: integer
+                            description: Weight should only be specified when Name references a TraefikService object (and to be precise, one that embeds a Weighted Round Robin).
+                        required:
+                        - name
+                  required:
+                  - kind
+                  - match
+              tls:
+                type: object
+                description: "TLS contains the TLS certificates configuration of the routes. To enable Let's Encrypt, use an empty TLS struct, e.g. in YAML: \n \t tls: {} # inline format \n \t tls: \t   secretName: # block format"
+                properties:
+                  certResolver:
+                    type: string
+                  domains:
+                    type: array
+                    items:
+                      type: object
+                      description: Domain holds a domain name with SANs.
+                      properties:
+                        main:
+                          type: string
+                        sans:
+                          type: array
+                          items:
+                            type: string
+                  options:
+                    type: object
+                    description: Options is a reference to a TLSOption, that specifies the parameters of the TLS connection.
+                    properties:
+                      name:
+                        type: string
+                      namespace:
+                        type: string
+                    required:
+                    - name
+                  secretName:
+                    type: string
+                    description: SecretName is the name of the referenced Kubernetes Secret to specify the certificate details.
+                  store:
+                    type: object
+                    description: Store is a reference to a TLSStore, that specifies the parameters of the TLS store.
+                    properties:
+                      name:
+                        type: string
+                      namespace:
+                        type: string
+                    required:
+                    - name
+            required:
+            - routes
+        required:
+        - metadata
+        - spec
+    served: true
+    storage: true
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: ingressroutetcps.traefik.containo.us
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.6.2
+spec:
+  group: traefik.containo.us
+  names:
+    kind: IngressRouteTCP
+    listKind: IngressRouteTCPList
+    plural: ingressroutetcps
+    singular: ingressroutetcp
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        type: object
+        description: IngressRouteTCP is an Ingress CRD specification.
+        properties:
+          apiVersion:
+            type: string
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+          kind:
+            type: string
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+          metadata:
+            type: object
+          spec:
+            type: object
+            description: IngressRouteTCPSpec is a specification for a IngressRouteTCPSpec resource.
+            properties:
+              entryPoints:
+                type: array
+                items:
+                  type: string
+              routes:
+                type: array
+                items:
+                  type: object
+                  description: RouteTCP contains the set of routes.
+                  properties:
+                    match:
+                      type: string
+                    middlewares:
+                      type: array
+                      description: Middlewares contains references to MiddlewareTCP resources.
+                      items:
+                        type: object
+                        description: ObjectReference is a generic reference to a Traefik resource.
+                        properties:
+                          name:
+                            type: string
+                          namespace:
+                            type: string
+                        required:
+                        - name
+                    services:
+                      type: array
+                      items:
+                        type: object
+                        description: ServiceTCP defines an upstream to proxy traffic.
+                        properties:
+                          name:
+                            type: string
+                          namespace:
+                            type: string
+                          port:
+                            anyOf:
+                            - type: integer
+                            - type: string
+                            x-kubernetes-int-or-string: true
+                          proxyProtocol:
+                            type: object
+                            description: ProxyProtocol holds the ProxyProtocol configuration.
+                            properties:
+                              version:
+                                type: integer
+                          terminationDelay:
+                            type: integer
+                          weight:
+                            type: integer
+                        required:
+                        - name
+                        - port
+                  required:
+                  - match
+              tls:
+                type: object
+                description: "TLSTCP contains the TLS certificates configuration of the routes. To enable Let's Encrypt, use an empty TLS struct, e.g. in YAML: \n \t tls: {} # inline format \n \t tls: \t   secretName: # block format"
+                properties:
+                  certResolver:
+                    type: string
+                  domains:
+                    type: array
+                    items:
+                      type: object
+                      description: Domain holds a domain name with SANs.
+                      properties:
+                        main:
+                          type: string
+                        sans:
+                          type: array
+                          items:
+                            type: string
+                  options:
+                    type: object
+                    description: Options is a reference to a TLSOption, that specifies the parameters of the TLS connection.
+                    properties:
+                      name:
+                        type: string
+                      namespace:
+                        type: string
+                    required:
+                    - name
+                  passthrough:
+                    type: boolean
+                  secretName:
+                    type: string
+                    description: SecretName is the name of the referenced Kubernetes Secret to specify the certificate details.
+                  store:
+                    type: object
+                    description: Store is a reference to a TLSStore, that specifies the parameters of the TLS store.
+                    properties:
+                      name:
+                        type: string
+                      namespace:
+                        type: string
+                    required:
+                    - name
+            required:
+            - routes
+        required:
+        - metadata
+        - spec
+    served: true
+    storage: true
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: ingressrouteudps.traefik.containo.us
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.6.2
+spec:
+  group: traefik.containo.us
+  names:
+    kind: IngressRouteUDP
+    listKind: IngressRouteUDPList
+    plural: ingressrouteudps
+    singular: ingressrouteudp
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        type: object
+        description: IngressRouteUDP is an Ingress CRD specification.
+        properties:
+          apiVersion:
+            type: string
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+          kind:
+            type: string
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+          metadata:
+            type: object
+          spec:
+            type: object
+            description: IngressRouteUDPSpec is a specification for a IngressRouteUDPSpec resource.
+            properties:
+              entryPoints:
+                type: array
+                items:
+                  type: string
+              routes:
+                type: array
+                items:
+                  type: object
+                  description: RouteUDP contains the set of routes.
+                  properties:
+                    services:
+                      type: array
+                      items:
+                        type: object
+                        description: ServiceUDP defines an upstream to proxy traffic.
+                        properties:
+                          name:
+                            type: string
+                          namespace:
+                            type: string
+                          port:
+                            anyOf:
+                            - type: integer
+                            - type: string
+                            x-kubernetes-int-or-string: true
+                          weight:
+                            type: integer
+                        required:
+                        - name
+                        - port
+            required:
+            - routes
+        required:
+        - metadata
+        - spec
+    served: true
+    storage: true
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: middlewares.traefik.containo.us
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.6.2
+spec:
+  group: traefik.containo.us
+  names:
+    kind: Middleware
+    listKind: MiddlewareList
+    plural: middlewares
+    singular: middleware
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        type: object
+        description: Middleware is a specification for a Middleware resource.
+        properties:
+          apiVersion:
+            type: string
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+          kind:
+            type: string
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+          metadata:
+            type: object
+          spec:
+            type: object
+            description: MiddlewareSpec holds the Middleware configuration.
+            properties:
+              addPrefix:
+                type: object
+                description: AddPrefix holds the AddPrefix configuration.
+                properties:
+                  prefix:
+                    type: string
+              basicAuth:
+                type: object
+                description: BasicAuth holds the HTTP basic authentication configuration.
+                properties:
+                  headerField:
+                    type: string
+                  realm:
+                    type: string
+                  removeHeader:
+                    type: boolean
+                  secret:
+                    type: string
+              buffering:
+                type: object
+                description: Buffering holds the request/response buffering configuration.
+                properties:
+                  maxRequestBodyBytes:
+                    type: integer
+                    format: int64
+                  maxResponseBodyBytes:
+                    type: integer
+                    format: int64
+                  memRequestBodyBytes:
+                    type: integer
+                    format: int64
+                  memResponseBodyBytes:
+                    type: integer
+                    format: int64
+                  retryExpression:
+                    type: string
+              chain:
+                type: object
+                description: Chain holds a chain of middlewares.
+                properties:
+                  middlewares:
+                    type: array
+                    items:
+                      type: object
+                      description: MiddlewareRef is a ref to the Middleware resources.
+                      properties:
+                        name:
+                          type: string
+                        namespace:
+                          type: string
+                      required:
+                      - name
+              circuitBreaker:
+                type: object
+                description: CircuitBreaker holds the circuit breaker configuration.
+                properties:
+                  expression:
+                    type: string
+              compress:
+                type: object
+                description: Compress holds the compress configuration.
+                properties:
+                  excludedContentTypes:
+                    type: array
+                    items:
+                      type: string
+              contentType:
+                type: object
+                description: ContentType middleware - or rather its unique `autoDetect` option - specifies whether to let the `Content-Type` header, if it has not been set by the backend, be automatically set to a value derived from the contents of the response. As a proxy, the default behavior should be to leave the header alone, regardless of what the backend did with it. However, the historic default was to always auto-detect and set the header if it was nil, and it is going to be kept that way in order to support users currently relying on it. This middleware exists to enable the correct behavior until at least the default one can be changed in a future version.
+                properties:
+                  autoDetect:
+                    type: boolean
+              digestAuth:
+                type: object
+                description: DigestAuth holds the Digest HTTP authentication configuration.
+                properties:
+                  headerField:
+                    type: string
+                  realm:
+                    type: string
+                  removeHeader:
+                    type: boolean
+                  secret:
+                    type: string
+              errors:
+                type: object
+                description: ErrorPage holds the custom error page configuration.
+                properties:
+                  status:
+                    type: array
+                    items:
+                      type: string
+                  service:
+                    type: object
+                    description: Service defines an upstream to proxy traffic.
+                    properties:
+                      name:
+                        type: string
+                        description: Name is a reference to a Kubernetes Service object (for a load-balancer of servers), or to a TraefikService object (service load-balancer, mirroring, _etc). The differentiation between the two is specified in the Kind field.
+                      namespace:
+                        type: string
+                      kind:
+                        type: string
+                        enum:
+                        - Service
+                        - TraefikService
+                      strategy:
+                        type: string
+                      port:
+                        anyOf:
+                        - type: integer
+                        - type: string
+                        x-kubernetes-int-or-string: true
+                      passHostHeader:
+                        type: boolean
+                      responseForwarding:
+                        type: object
+                        description: ResponseForwarding holds configuration for the forward of the response.
+                        properties:
+                          flushInterval:
+                            type: string
+                      scheme:
+                        type: string
+                      serversTransport:
+                        type: string
+                      sticky:
+                        type: object
+                        description: Sticky holds the sticky configuration.
+                        properties:
+                          cookie:
+                            type: object
+                            description: Cookie holds the sticky configuration based on cookie.
+                            properties:
+                              name:
+                                type: string
+                              httpOnly:
+                                type: boolean
+                              sameSite:
+                                type: string
+                              secure:
+                                type: boolean
+                      weight:
+                        type: integer
+                        description: Weight should only be specified when Name references a TraefikService object (and to be precise, one that embeds a Weighted Round Robin).
+                    required:
+                    - name
+                  query:
+                    type: string
+              forwardAuth:
+                type: object
+                description: ForwardAuth holds the http forward authentication configuration.
+                properties:
+                  address:
+                    type: string
+                  authRequestHeaders:
+                    type: array
+                    items:
+                      type: string
+                  authResponseHeaders:
+                    type: array
+                    items:
+                      type: string
+                  authResponseHeadersRegex:
+                    type: string
+                  tls:
+                    type: object
+                    description: ClientTLS holds TLS specific configurations as client.
+                    properties:
+                      caOptional:
+                        type: boolean
+                      caSecret:
+                        type: string
+                      certSecret:
+                        type: string
+                      insecureSkipVerify:
+                        type: boolean
+                  trustForwardHeader:
+                    type: boolean
+              headers:
+                type: object
+                description: Headers holds the custom header configuration.
+                properties:
+                  accessControlAllowCredentials:
+                    type: boolean
+                    description: AccessControlAllowCredentials is only valid if true. false is ignored.
+                  accessControlAllowHeaders:
+                    type: array
+                    description: AccessControlAllowHeaders must be used in response to a preflight request with Access-Control-Request-Headers set.
+                    items:
+                      type: string
+                  accessControlAllowMethods:
+                    type: array
+                    description: AccessControlAllowMethods must be used in response to a preflight request with Access-Control-Request-Method set.
+                    items:
+                      type: string
+                  accessControlAllowOriginList:
+                    type: array
+                    description: AccessControlAllowOriginList is a list of allowable origins. Can also be a wildcard origin "*".
+                    items:
+                      type: string
+                  accessControlAllowOriginListRegex:
+                    type: array
+                    description: AccessControlAllowOriginListRegex is a list of allowable origins written following the Regular Expression syntax (https://golang.org/pkg/regexp/).
+                    items:
+                      type: string
+                  accessControlExposeHeaders:
+                    type: array
+                    description: AccessControlExposeHeaders sets valid headers for the response.
+                    items:
+                      type: string
+                  accessControlMaxAge:
+                    type: integer
+                    description: AccessControlMaxAge sets the time that a preflight request may be cached.
+                    format: int64
+                  addVaryHeader:
+                    type: boolean
+                    description: AddVaryHeader controls if the Vary header is automatically added/updated when the AccessControlAllowOriginList is set.
+                  allowedHosts:
+                    type: array
+                    items:
+                      type: string
+                  browserXssFilter:
+                    type: boolean
+                  contentSecurityPolicy:
+                    type: string
+                  contentTypeNosniff:
+                    type: boolean
+                  customBrowserXSSValue:
+                    type: string
+                  customFrameOptionsValue:
+                    type: string
+                  customRequestHeaders:
+                    type: object
+                    additionalProperties:
+                      type: string
+                  customResponseHeaders:
+                    type: object
+                    additionalProperties:
+                      type: string
+                  featurePolicy:
+                    type: string
+                    description: 'Deprecated: use PermissionsPolicy instead.'
+                  forceSTSHeader:
+                    type: boolean
+                  frameDeny:
+                    type: boolean
+                  hostsProxyHeaders:
+                    type: array
+                    items:
+                      type: string
+                  isDevelopment:
+                    type: boolean
+                  permissionsPolicy:
+                    type: string
+                  publicKey:
+                    type: string
+                  referrerPolicy:
+                    type: string
+                  sslForceHost:
+                    type: boolean
+                    description: 'Deprecated: use RedirectRegex instead.'
+                  sslHost:
+                    type: string
+                    description: 'Deprecated: use RedirectRegex instead.'
+                  sslProxyHeaders:
+                    type: object
+                    additionalProperties:
+                      type: string
+                  sslRedirect:
+                    type: boolean
+                    description: 'Deprecated: use EntryPoint redirection or RedirectScheme instead.'
+                  sslTemporaryRedirect:
+                    type: boolean
+                    description: 'Deprecated: use EntryPoint redirection or RedirectScheme instead.'
+                  stsIncludeSubdomains:
+                    type: boolean
+                  stsPreload:
+                    type: boolean
+                  stsSeconds:
+                    type: integer
+                    format: int64
+              inFlightReq:
+                type: object
+                description: InFlightReq limits the number of requests being processed and served concurrently.
+                properties:
+                  amount:
+                    type: integer
+                    format: int64
+                  sourceCriterion:
+                    type: object
+                    description: SourceCriterion defines what criterion is used to group requests as originating from a common source. If none are set, the default is to use the request's remote address field. All fields are mutually exclusive.
+                    properties:
+                      ipStrategy:
+                        type: object
+                        description: IPStrategy holds the ip strategy configuration.
+                        properties:
+                          depth:
+                            type: integer
+                          excludedIPs:
+                            type: array
+                            items:
+                              type: string
+                      requestHeaderName:
+                        type: string
+                      requestHost:
+                        type: boolean
+              ipWhiteList:
+                type: object
+                description: IPWhiteList holds the ip white list configuration.
+                properties:
+                  ipStrategy:
+                    type: object
+                    description: IPStrategy holds the ip strategy configuration.
+                    properties:
+                      depth:
+                        type: integer
+                      excludedIPs:
+                        type: array
+                        items:
+                          type: string
+                  sourceRange:
+                    type: array
+                    items:
+                      type: string
+              passTLSClientCert:
+                type: object
+                description: PassTLSClientCert holds the TLS client cert headers configuration.
+                properties:
+                  info:
+                    type: object
+                    description: TLSClientCertificateInfo holds the client TLS certificate info configuration.
+                    properties:
+                      issuer:
+                        type: object
+                        description: TLSCLientCertificateDNInfo holds the client TLS certificate distinguished name info configuration. cf https://tools.ietf.org/html/rfc3739
+                        properties:
+                          commonName:
+                            type: boolean
+                          country:
+                            type: boolean
+                          domainComponent:
+                            type: boolean
+                          locality:
+                            type: boolean
+                          organization:
+                            type: boolean
+                          province:
+                            type: boolean
+                          serialNumber:
+                            type: boolean
+                      notAfter:
+                        type: boolean
+                      notBefore:
+                        type: boolean
+                      sans:
+                        type: boolean
+                      serialNumber:
+                        type: boolean
+                      subject:
+                        type: object
+                        description: TLSCLientCertificateDNInfo holds the client TLS certificate distinguished name info configuration. cf https://tools.ietf.org/html/rfc3739
+                        properties:
+                          commonName:
+                            type: boolean
+                          country:
+                            type: boolean
+                          domainComponent:
+                            type: boolean
+                          locality:
+                            type: boolean
+                          organization:
+                            type: boolean
+                          province:
+                            type: boolean
+                          serialNumber:
+                            type: boolean
+                  pem:
+                    type: boolean
+              plugin:
+                type: object
+                additionalProperties:
+                  x-kubernetes-preserve-unknown-fields: true
+              rateLimit:
+                type: object
+                description: RateLimit holds the rate limiting configuration for a given router.
+                properties:
+                  average:
+                    type: integer
+                    format: int64
+                  burst:
+                    type: integer
+                    format: int64
+                  period:
+                    anyOf:
+                    - type: integer
+                    - type: string
+                    x-kubernetes-int-or-string: true
+                  sourceCriterion:
+                    type: object
+                    description: SourceCriterion defines what criterion is used to group requests as originating from a common source. If none are set, the default is to use the request's remote address field. All fields are mutually exclusive.
+                    properties:
+                      ipStrategy:
+                        type: object
+                        description: IPStrategy holds the ip strategy configuration.
+                        properties:
+                          depth:
+                            type: integer
+                          excludedIPs:
+                            type: array
+                            items:
+                              type: string
+                      requestHeaderName:
+                        type: string
+                      requestHost:
+                        type: boolean
+              redirectRegex:
+                type: object
+                description: RedirectRegex holds the redirection configuration.
+                properties:
+                  permanent:
+                    type: boolean
+                  regex:
+                    type: string
+                  replacement:
+                    type: string
+              redirectScheme:
+                type: object
+                description: RedirectScheme holds the scheme redirection configuration.
+                properties:
+                  port:
+                    type: string
+                  permanent:
+                    type: boolean
+                  scheme:
+                    type: string
+              replacePath:
+                type: object
+                description: ReplacePath holds the ReplacePath configuration.
+                properties:
+                  path:
+                    type: string
+              replacePathRegex:
+                type: object
+                description: ReplacePathRegex holds the ReplacePathRegex configuration.
+                properties:
+                  regex:
+                    type: string
+                  replacement:
+                    type: string
+              retry:
+                type: object
+                description: Retry holds the retry configuration.
+                properties:
+                  attempts:
+                    type: integer
+                  initialInterval:
+                    anyOf:
+                    - type: integer
+                    - type: string
+                    x-kubernetes-int-or-string: true
+              stripPrefix:
+                type: object
+                description: StripPrefix holds the StripPrefix configuration.
+                properties:
+                  forceSlash:
+                    type: boolean
+                  prefixes:
+                    type: array
+                    items:
+                      type: string
+              stripPrefixRegex:
+                type: object
+                description: StripPrefixRegex holds the StripPrefixRegex configuration.
+                properties:
+                  regex:
+                    type: array
+                    items:
+                      type: string
+        required:
+        - metadata
+        - spec
+    served: true
+    storage: true
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: middlewaretcps.traefik.containo.us
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.6.2
+spec:
+  group: traefik.containo.us
+  names:
+    kind: MiddlewareTCP
+    listKind: MiddlewareTCPList
+    plural: middlewaretcps
+    singular: middlewaretcp
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        type: object
+        description: MiddlewareTCP is a specification for a MiddlewareTCP resource.
+        properties:
+          apiVersion:
+            type: string
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+          kind:
+            type: string
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+          metadata:
+            type: object
+          spec:
+            type: object
+            description: MiddlewareTCPSpec holds the MiddlewareTCP configuration.
+            properties:
+              ipWhiteList:
+                type: object
+                description: TCPIPWhiteList holds the TCP ip white list configuration.
+                properties:
+                  sourceRange:
+                    type: array
+                    items:
+                      type: string
+        required:
+        - metadata
+        - spec
+    served: true
+    storage: true
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: serverstransports.traefik.containo.us
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.6.2
+spec:
+  group: traefik.containo.us
+  names:
+    kind: ServersTransport
+    listKind: ServersTransportList
+    plural: serverstransports
+    singular: serverstransport
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        type: object
+        description: ServersTransport is a specification for a ServersTransport resource.
+        properties:
+          apiVersion:
+            type: string
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+          kind:
+            type: string
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+          metadata:
+            type: object
+          spec:
+            type: object
+            description: ServersTransportSpec options to configure communication between Traefik and the servers.
+            properties:
+              certificatesSecrets:
+                type: array
+                description: Certificates for mTLS.
+                items:
+                  type: string
+              disableHTTP2:
+                type: boolean
+                description: Disable HTTP/2 for connections with backend servers.
+              forwardingTimeouts:
+                type: object
+                description: Timeouts for requests forwarded to the backend servers.
+                properties:
+                  dialTimeout:
+                    anyOf:
+                    - type: integer
+                    - type: string
+                    description: The amount of time to wait until a connection to a backend server can be established. If zero, no timeout exists.
+                    x-kubernetes-int-or-string: true
+                  idleConnTimeout:
+                    anyOf:
+                    - type: integer
+                    - type: string
+                    description: The maximum period for which an idle HTTP keep-alive connection will remain open before closing itself.
+                    x-kubernetes-int-or-string: true
+                  responseHeaderTimeout:
+                    anyOf:
+                    - type: integer
+                    - type: string
+                    description: The amount of time to wait for a server's response headers after fully writing the request (including its body, if any). If zero, no timeout exists.
+                    x-kubernetes-int-or-string: true
+              insecureSkipVerify:
+                type: boolean
+                description: Disable SSL certificate verification.
+              maxIdleConnsPerHost:
+                type: integer
+                description: If non-zero, controls the maximum idle (keep-alive) to keep per-host. If zero, DefaultMaxIdleConnsPerHost is used.
+              peerCertURI:
+                type: string
+                description: URI used to match against SAN URI during the peer certificate verification.
+              rootCAsSecrets:
+                type: array
+                description: Add cert file for self-signed certificate.
+                items:
+                  type: string
+              serverName:
+                type: string
+                description: ServerName used to contact the server.
+        required:
+        - metadata
+        - spec
+    served: true
+    storage: true
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: tlsoptions.traefik.containo.us
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.6.2
+spec:
+  group: traefik.containo.us
+  names:
+    kind: TLSOption
+    listKind: TLSOptionList
+    plural: tlsoptions
+    singular: tlsoption
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        type: object
+        description: TLSOption is a specification for a TLSOption resource.
+        properties:
+          apiVersion:
+            type: string
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+          kind:
+            type: string
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+          metadata:
+            type: object
+          spec:
+            type: object
+            description: TLSOptionSpec configures TLS for an entry point.
+            properties:
+              alpnProtocols:
+                type: array
+                items:
+                  type: string
+              cipherSuites:
+                type: array
+                items:
+                  type: string
+              clientAuth:
+                type: object
+                description: ClientAuth defines the parameters of the client authentication part of the TLS connection, if any.
+                properties:
+                  clientAuthType:
+                    type: string
+                    description: ClientAuthType defines the client authentication type to apply.
+                    enum:
+                    - NoClientCert
+                    - RequestClientCert
+                    - VerifyClientCertIfGiven
+                    - RequireAndVerifyClientCert
+                  secretNames:
+                    type: array
+                    description: SecretName is the name of the referenced Kubernetes Secret to specify the certificate details.
+                    items:
+                      type: string
+              curvePreferences:
+                type: array
+                items:
+                  type: string
+              maxVersion:
+                type: string
+              minVersion:
+                type: string
+              preferServerCipherSuites:
+                type: boolean
+              sniStrict:
+                type: boolean
+        required:
+        - metadata
+        - spec
+    served: true
+    storage: true
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: tlsstores.traefik.containo.us
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.6.2
+spec:
+  group: traefik.containo.us
+  names:
+    kind: TLSStore
+    listKind: TLSStoreList
+    plural: tlsstores
+    singular: tlsstore
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        type: object
+        description: TLSStore is a specification for a TLSStore resource.
+        properties:
+          apiVersion:
+            type: string
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+          kind:
+            type: string
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+          metadata:
+            type: object
+          spec:
+            type: object
+            description: TLSStoreSpec configures a TLSStore resource.
+            properties:
+              defaultCertificate:
+                type: object
+                description: DefaultCertificate holds a secret name for the TLSOption resource.
+                properties:
+                  secretName:
+                    type: string
+                    description: SecretName is the name of the referenced Kubernetes Secret to specify the certificate details.
+                required:
+                - secretName
+            required:
+            - defaultCertificate
+        required:
+        - metadata
+        - spec
+    served: true
+    storage: true
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: traefikservices.traefik.containo.us
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.6.2
+spec:
+  group: traefik.containo.us
+  names:
+    kind: TraefikService
+    listKind: TraefikServiceList
+    plural: traefikservices
+    singular: traefikservice
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        type: object
+        description: TraefikService is the specification for a service (that an IngressRoute refers to) that is usually not a terminal service (i.e. not a pod of servers), as opposed to a Kubernetes Service. That is to say, it usually refers to other (children) services, which themselves can be TraefikServices or Services.
+        properties:
+          apiVersion:
+            type: string
+            description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+          kind:
+            type: string
+            description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+          metadata:
+            type: object
+          spec:
+            type: object
+            description: ServiceSpec defines whether a TraefikService is a load-balancer of services or a mirroring service.
+            properties:
+              mirroring:
+                type: object
+                description: Mirroring defines a mirroring service, which is composed of a main load-balancer, and a list of mirrors.
+                properties:
+                  name:
+                    type: string
+                    description: Name is a reference to a Kubernetes Service object (for a load-balancer of servers), or to a TraefikService object (service load-balancer, mirroring, _etc). The differentiation between the two is specified in the Kind field.
+                  namespace:
+                    type: string
+                  kind:
+                    type: string
+                    enum:
+                    - Service
+                    - TraefikService
+                  strategy:
+                    type: string
+                  port:
+                    anyOf:
+                    - type: integer
+                    - type: string
+                    x-kubernetes-int-or-string: true
+                  maxBodySize:
+                    type: integer
+                    format: int64
+                  mirrors:
+                    type: array
+                    items:
+                      type: object
+                      description: MirrorService defines one of the mirrors of a Mirroring service.
+                      properties:
+                        name:
+                          type: string
+                          description: Name is a reference to a Kubernetes Service object (for a load-balancer of servers), or to a TraefikService object (service load-balancer, mirroring, _etc). The differentiation between the two is specified in the Kind field.
+                        namespace:
+                          type: string
+                        kind:
+                          type: string
+                          enum:
+                          - Service
+                          - TraefikService
+                        strategy:
+                          type: string
+                        port:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          x-kubernetes-int-or-string: true
+                        passHostHeader:
+                          type: boolean
+                        percent:
+                          type: integer
+                        responseForwarding:
+                          type: object
+                          description: ResponseForwarding holds configuration for the forward of the response.
+                          properties:
+                            flushInterval:
+                              type: string
+                        scheme:
+                          type: string
+                        serversTransport:
+                          type: string
+                        sticky:
+                          type: object
+                          description: Sticky holds the sticky configuration.
+                          properties:
+                            cookie:
+                              type: object
+                              description: Cookie holds the sticky configuration based on cookie.
+                              properties:
+                                name:
+                                  type: string
+                                httpOnly:
+                                  type: boolean
+                                sameSite:
+                                  type: string
+                                secure:
+                                  type: boolean
+                        weight:
+                          type: integer
+                          description: Weight should only be specified when Name references a TraefikService object (and to be precise, one that embeds a Weighted Round Robin).
+                      required:
+                      - name
+                  passHostHeader:
+                    type: boolean
+                  responseForwarding:
+                    type: object
+                    description: ResponseForwarding holds configuration for the forward of the response.
+                    properties:
+                      flushInterval:
+                        type: string
+                  scheme:
+                    type: string
+                  serversTransport:
+                    type: string
+                  sticky:
+                    type: object
+                    description: Sticky holds the sticky configuration.
+                    properties:
+                      cookie:
+                        type: object
+                        description: Cookie holds the sticky configuration based on cookie.
+                        properties:
+                          name:
+                            type: string
+                          httpOnly:
+                            type: boolean
+                          sameSite:
+                            type: string
+                          secure:
+                            type: boolean
+                  weight:
+                    type: integer
+                    description: Weight should only be specified when Name references a TraefikService object (and to be precise, one that embeds a Weighted Round Robin).
+                required:
+                - name
+              weighted:
+                type: object
+                description: WeightedRoundRobin defines a load-balancer of services.
+                properties:
+                  services:
+                    type: array
+                    items:
+                      type: object
+                      description: Service defines an upstream to proxy traffic.
+                      properties:
+                        name:
+                          type: string
+                          description: Name is a reference to a Kubernetes Service object (for a load-balancer of servers), or to a TraefikService object (service load-balancer, mirroring, _etc). The differentiation between the two is specified in the Kind field.
+                        namespace:
+                          type: string
+                        kind:
+                          type: string
+                          enum:
+                          - Service
+                          - TraefikService
+                        strategy:
+                          type: string
+                        port:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          x-kubernetes-int-or-string: true
+                        passHostHeader:
+                          type: boolean
+                        responseForwarding:
+                          type: object
+                          description: ResponseForwarding holds configuration for the forward of the response.
+                          properties:
+                            flushInterval:
+                              type: string
+                        scheme:
+                          type: string
+                        serversTransport:
+                          type: string
+                        sticky:
+                          type: object
+                          description: Sticky holds the sticky configuration.
+                          properties:
+                            cookie:
+                              type: object
+                              description: Cookie holds the sticky configuration based on cookie.
+                              properties:
+                                name:
+                                  type: string
+                                httpOnly:
+                                  type: boolean
+                                sameSite:
+                                  type: string
+                                secure:
+                                  type: boolean
+                        weight:
+                          type: integer
+                          description: Weight should only be specified when Name references a TraefikService object (and to be precise, one that embeds a Weighted Round Robin).
+                      required:
+                      - name
+                  sticky:
+                    type: object
+                    description: Sticky holds the sticky configuration.
+                    properties:
+                      cookie:
+                        type: object
+                        description: Cookie holds the sticky configuration based on cookie.
+                        properties:
+                          name:
+                            type: string
+                          httpOnly:
+                            type: boolean
+                          sameSite:
+                            type: string
+                          secure:
+                            type: boolean
+        required:
+        - metadata
+        - spec
+    served: true
+    storage: true
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - 000_prefix_middleware.yaml
+  - 001_dashboard.yaml
+  - 002_kubectl.yaml
+namespace: api-gateway-system
+commonLabels:
+  app.kubernetes.io/managed-by: tmax-cloud
+  app.kubernetes.io/component: ingressroute
+  app.kubernetes.io/part-of: api-gateway

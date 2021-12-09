@@ -1,0 +1,26 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: gateway-tls
+  namespace: api-gateway-system
+spec:
+  secretName: gateway-tls-selfsigned
+  commonName: {{DOMAIN_NAME}}
+  subject:
+    organizations:
+      - "tmax-cloud"
+  isCA: false
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
+    - client auth
+  dnsNames:
+    - "tmax-cloud"
+    - "{{DOMAIN_NAME}}"
+    - "*.{{DOMAIN_NAME}}"
+  issuerRef:
+    kind: ClusterIssuer
+    group: cert-manager.io
+    name: tmaxcloud-issuer

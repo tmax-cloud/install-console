@@ -1,0 +1,25 @@
+# when having your own domain
+# Create secret
+# kubectl create secret generic route53-secret --namespace cert-manager --from-literal=secret-access-key="wIBzZ2j8j7O2xiGAS1Ulw8I1n4LzMUjy3VXVjYJ6"
+## setting
+## https://voyagermesh.com/docs/v12.0.0/guides/cert-manager/dns01_challenge/aws-route53/
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: gateway-issuer
+  namespace: api-gateway-system
+spec:
+  acme:
+    email: {{EMAIL}}
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    solvers:
+      - dns01:
+          route53:
+            region: ap-northeast-2
+            accessKeyID: {{ACCESS_KEY_ID}}
+            secretAccessKeySecretRef:
+              name: route53-secret
+              key: secret-access-key
