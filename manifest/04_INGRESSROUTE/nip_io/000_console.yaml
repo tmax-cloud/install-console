@@ -1,0 +1,81 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: console-ingressroute
+  namespace: api-gateway-system
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: PathPrefix(`/`, `/static/`, `/api/resource/`, `/api/console/`) && HostRegexp(`{{CONSOLE}}.{ip:.*}.nip.io`)
+      priority: 10
+      services:
+        - name: console
+          namespace: api-gateway-system
+          kind: Service
+          port: console
+    - kind: Rule
+      match: PathPrefix(`/api/hypercloud`, `/api/multi-hypercloud`,`/api/webhook`) && HostRegexp(`{{CONSOLE}}.{ip:.*}.nip.io`)
+      priority: 100
+      middlewares:
+        - name: jwt-decode-auth@file
+        - name: hypercloud-stripprefix@file
+      services:
+        - kind: Service
+          name: hypercloud5-api-server-service
+          namespace: hypercloud5-system
+          port: https
+          scheme: https
+          serversTransport: insecure@file
+    - kind: Rule
+      match: PathPrefix(`/api/kubernetes`) && HostRegexp(`{{CONSOLE}}.{ip:.*}.nip.io`)
+      priority: 100
+      middlewares:
+        - name: jwt-decode-auth@file
+        - name: kubernetes-stripprefix@file
+      services:
+        - kind: Service
+          name: kubernetes
+          namespace: default
+          port: https
+          scheme: https
+          serversTransport: kubernetes@file
+    - kind: Rule
+      match: PathPrefix(`/api/prometheus-tenancy/api`) && HostRegexp(`{{CONSOLE}}.{ip:.*}.nip.io`)
+      priority: 100
+      middlewares:
+        - name: jwt-decode-auth@file
+        - name: monitoring-stripprefix-tenancy@file
+      services:
+        - kind: Service
+          name: prometheus-k8s
+          namespace: monitoring
+          port: web
+          scheme: http
+    - kind: Rule
+      match: PathPrefix(`/api/prometheus/api`) && HostRegexp(`{{CONSOLE}}.{ip:.*}.nip.io`)
+      priority: 100
+      middlewares:
+        - name: jwt-decode-auth@file
+        - name: monitoring-stripprefix@file
+      services:
+        - kind: Service
+          name: prometheus-k8s
+          namespace: monitoring
+          port: web
+          scheme: http
+    - kind: Rule
+      match: PathPrefix(`/api/alertmanager/api`) && HostRegexp(`{{CONSOLE}}.{ip:.*}.nip.io`)
+      priority: 100
+      middlewares:
+        - name: jwt-decode-auth@file
+        - name: monitoring-stripprefix@file
+      services:
+        - kind: Service
+          name: alertmanager-main
+          namespace: monitoring
+          port: web
+          scheme: http
+  tls: {} # use default tls

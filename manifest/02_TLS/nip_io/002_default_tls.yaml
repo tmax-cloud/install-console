@@ -9,5 +9,4 @@ metadata:
   namespace: api-gateway-system
 spec:
   defaultCertificate:
-    secretName: tmaxcloud-gateway-selfsigned-front
-
+    secretName: gateway-tls-nip-io

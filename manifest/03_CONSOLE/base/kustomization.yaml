@@ -5,7 +5,6 @@ resources:
   - 000_serviceaccount.yaml
   - 001_deploy.yaml
   - 002_service.yaml
-  - 003_ingressroute.yaml
 namespace: api-gateway-system
 images:
   - name: tmaxcloudck/hypercloud-console

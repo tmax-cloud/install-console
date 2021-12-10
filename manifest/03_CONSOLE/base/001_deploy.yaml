@@ -24,9 +24,8 @@ spec:
             - --base-address=http://0.0.0.0:31303
             - --keycloak-realm={{REALM}}
             - --keycloak-auth-url=https://{{HYPERAUTH}}/auth
-            - --keycloak-client-id={{CLIENTID}}
-            - --mc-mode=true
-            - --release-mode=true
+            - --keycloak-client-id={{CLIENT_ID}}
+            - --mc-mode={{MC_MODE}}
           image: tmaxcloudck/hypercloud-console:5.0.36.0
           imagePullPolicy: IfNotPresent
           ports:

@@ -2,19 +2,10 @@
 DIR ?= temp
 include Makefile.properties
 
-folder.deploy:
-	@{ \
-	mkdir $(DIR) 2>/dev/null ;\
-	cp -r manifest/* $(DIR) 2> /dev/null ;\
-	}
-	find ./$(DIR) -name "*.yaml" -exec perl -pi -e 's/{{HYPERAUTH}}/$(HYPERAUTH)/g' {} \;
-	find ./$(DIR) -name "*.yaml" -exec perl -pi -e 's/{{CLIENTID}}/$(CLIENTID)/g' {} \;
-	find ./$(DIR) -name "*.yaml" -exec perl -pi -e 's/{{REALM}}/$(REALM)/g' {} \;
-	find ./$(DIR) -name "*.yaml" -exec perl -pi -e 's/{{CONSOLE}}/$(CONSOLE)/g' {} \;
-folder.clean:
-	@{ \
-	rm -rf ./$(DIR) > /dev/null ;\
-	}
+dir.build:
+	mkdir ./$(DIR)
+dir.clean:
+	rm -rf ./$(DIR)
 
 init.build:
 	cp -r manifest/00_INIT $(DIR)
@@ -49,20 +40,32 @@ traefik.clean:
 tls.build: kustomize
 	cp -r manifest/02_TLS $(DIR)
 ifeq ($(DEFAULT_TLS_TYPE), acme)
+ifeq	($(DOMAIN_NAME),)
+	@echo "Error: DOMAIN_NAME is empty"
+	exit 1
+else
 	find ./$(DIR)/02_TLS/acme -name "*.yaml" -exec perl -pi -e 's/{{EMAIL}}/$(EMAIL)/g' {} \;
 	find ./$(DIR)/02_TLS/acme -name "*.yaml" -exec perl -pi -e 's/{{ACCESS_KEY_ID}}/$(ACCESS_KEY_ID)/g' {} \;
 	find ./$(DIR)/02_TLS/acme -name "secret_access_key" -exec perl -pi -e 's/{{SECRET_ACCESS_KEY}}/$(SECRET_ACCESS_KEY)/g' {} \;
 	find ./$(DIR)/02_TLS/acme -name "*.yaml" -exec perl -pi -e 's/{{DOMAIN_NAME}}/$(DOMAIN_NAME)/g' {} \;
-	$(KUSTOMIZE) build --reorder none ./$(DIR)/02_TLS/overlays/acme > ./$(DIR)/02_tls_acme.yaml
+	$(KUSTOMIZE) build --reorder none ./$(DIR)/02_TLS/acme > ./$(DIR)/02_tls_acme.yaml
+endif
 else ifeq ($(DEFAULT_TLS_TYPE), nip_io)
-	find ./$(DIR)/02_TLS/nip_io -name "*.yaml" -exec perl -pi -e 's/{{DOMAIN_NAME}}/$(TRAEFIK_IP).nip.io/g' {} \;
-	$(KUSTOMIZE) build --reorder none ./$(DIR)/02_TLS/overlays/nip_io > ./$(DIR)/02_tls_nip_io.yaml
-else ifeq ($(DEFALUT_TLS_TYPE), selfsigned)
-	find ./$(DIR)/ -name "*.yaml" -exec perl -pi -e 's/{{DOMAIN_NAME}}/$(DOMAIN_NAME)/g' {} \;
-	$(KUSTOMIZE) build --reorder none ./$(DIR)/02_TLS/overlays/selfsigned > ./$(DIR)/02_tls_selfsigned.yaml
+	find ./$(DIR)/02_TLS/nip_io -name "*.yaml" -exec perl -pi -e 's/{{TRAEFIK_IP}}/$(TRAEFIK_IP)/g' {} \;
+	$(KUSTOMIZE) build --reorder none ./$(DIR)/02_TLS/nip_io > ./$(DIR)/02_tls_nip_io.yaml
+else ifeq ($(DEFAULT_TLS_TYPE), selfsigned)
+ifeq	($(DOMAIN_NAME),)
+	@echo "Error: DOMAIN_NAME is empty"
+	exit 1
 else
-	find ./$(DIR)/ -name "*.yaml" -exec perl -pi -e 's/{{DOMAIN_NAME}}/$(DOMAIN_NAME)/g' {} \;
-	echo "Use the default tls created by Traefik which generated automatically."
+	find ./$(DIR)/02_TLS/selfsigned -name "*.yaml" -exec perl -pi -e 's/{{DOMAIN_NAME}}/$(DOMAIN_NAME)/g' {} \;
+	$(KUSTOMIZE) build --reorder none ./$(DIR)/02_TLS/selfsigned > ./$(DIR)/02_tls_selfsigned.yaml
+endif
+else ifeq ($(DEFAULT_TLS_TYPE), none)
+	@echo "Use the default tls created by Traefik which generated automatically."
+else 
+	@echo "Must be one of (acme, nip_io, selfsigned, none)"
+	exit
 endif
 tls.apply:
 ifeq ($(DEFAULT_TLS_TYPE), acme)
@@ -71,48 +74,76 @@ else ifeq ($(DEFALUT_TLS_TYPE), nip_io)
 	kubectl apply -f ./$(DIR)/02_tls_nip_io.yaml
 else ifeq ($(DEFAULT_TLS_TYPE), selfsigned)
 	kubectl apply -f ./$(DIR)/02_tls_selfsigned.yaml
+else ifeq ($(DEFALUT_TLS_TYPE), none)
+	@echo "Use the default tls created by Traefik which generated automatically."
 else
+	@echo "Error: Must be one of (acme, nip_io, selfsigned, none)"
+	exit 1
 endif
 tls.delete:
-ifeq ($(GATEWAY_TLS), acme)
+ifeq ($(DEFAULT_TLS_TYPE), acme)
 	kubectl delete -f ./$(DIR)/02_tls_acme.yaml
-else
+else ifeq ($(DEFALUT_TLS_TYPE), nip_io)
+	kubectl delete -f ./$(DIR)/02_tls_nip_io.yaml
+else ifeq ($(DEFAULT_TLS_TYPE), selfsigned)
 	kubectl delete -f ./$(DIR)/02_tls_selfsigned.yaml
+else
+	@cho "Error: Must be one of (acme, nip_io, selfsigned, none)"
+	exit 1
 endif
 tls.clean:
-ifeq ($(GATEWAY_TLS), acme)
-	rm -rf ./$(DIR)/02_tls_acme.yaml
-else
-	rm -rf ./$(DIR)/02_tls_selfsigned.yaml
-endif
+	rm -rf ./$(DIR)/02_tls_*.yaml
 
-console.deploy: kustomize
+console.build: kustomize
+	cp -r manifest/03_CONSOLE $(DIR)	
+	find ./$(DIR)/03_CONSOLE -name "*.yaml" -exec perl -pi -e 's/{{HYPERAUTH}}/$(HYPERAUTH)/g' {} \;
+	find ./$(DIR)/03_CONSOLE -name "*.yaml" -exec perl -pi -e 's/{{CLIENT_ID}}/$(CLIENT_ID)/g' {} \;
+	find ./$(DIR)/03_CONSOLE -name "*.yaml" -exec perl -pi -e 's/{{REALM}}/$(REALM)/g' {} \;
+	find ./$(DIR)/03_CONSOLE -name "*.yaml" -exec perl -pi -e 's/{{MC_MODE}}/$(MC_MODE)/g' {} \;
 	cd ./$(DIR)/03_CONSOLE/base && $(KUSTOMIZE) edit set image tmaxcloudck/hypercloud-console=${CONSOLE_IMG}
 	$(KUSTOMIZE) build --reorder none ./$(DIR)/03_CONSOLE/base > ./$(DIR)/03_console.yaml
+console.apply:
 	kubectl apply -f ./$(DIR)/03_console.yaml
-console.teardown:
+console.delete:
 	kubectl delete -f ./$(DIR)/03_console.yaml
 console.clean:
 	rm -rf ./$(DIR)/03_console.yaml
 
-ingressroute.deploy: kustomize
+ingressroute.build: kustomize
+	cp -r manifest/04_INGRESSROUTE $(DIR)	
+	find ./$(DIR)/04_INGRESSROUTE -name "*.yaml" -exec perl -pi -e 's/{{CONSOLE}}/$(CONSOLE)/g' {} \;	
+ifeq ($(DEFAULT_TLS_TYPE), nip_io)
+	$(KUSTOMIZE) build --reorder none ./$(DIR)/04_INGRESSROUTE/nip_io > ./$(DIR)/04_ingressroute.yaml
+else ifeq ($(DEFAULT_TLS_TYPE), acme)
+ifeq	($(DOMAIN_NAME),)
+	@echo "Error: DOMAIN_NAME is empty"
+	exit 1
+else
+	find ./$(DIR)/04_INGRESSROUTE/base -name "*.yaml" -exec perl -pi -e 's/{{DOMAIN_NAME}}/$(DOMAIN_NAME)/g' {} \;	
 	$(KUSTOMIZE) build --reorder none ./$(DIR)/04_INGRESSROUTE/base > ./$(DIR)/04_ingressroute.yaml
+endif
+else ifeq ($(DEFAULT_TLS_TYPE), selfsigned)
+ifeq	($(DOMAIN_NAME),)
+	@echo "Error: DOMAIN_NAME is empty"
+	exit 1
+else
+	find ./$(DIR)/04_INGRESSROUTE/base -name "*.yaml" -exec perl -pi -e 's/{{DOMAIN_NAME}}/$(DOMAIN_NAME)/g' {} \;	
+	$(KUSTOMIZE) build --reorder none ./$(DIR)/04_INGRESSROUTE/base > ./$(DIR)/04_ingressroute.yaml
+endif
+else ifeq ($(DEFAULT_TLS_TYPE), none)
+ifeq	($(DOMAIN_NAME),)
+	$(KUSTOMIZE) build --reorder none ./$(DIR)/04_INGRESSROUTE/none_host > ./$(DIR)/04_ingressroute.yaml
+else
+	find ./$(DIR)/04_INGRESSROUTE/base -name "*.yaml" -exec perl -pi -e 's/{{DOMAIN_NAME}}/$(DOMAIN_NAME)/g' {} \;	
+	$(KUSTOMIZE) build --reorder none ./$(DIR)/04_INGRESSROUTE/base > ./$(DIR)/04_ingressroute.yaml
+endif
+else
+	@cho "Error: Must be one of (acme, nip_io, selfsigned, none)"
+	exit 1
+endif
+ingressroute.apply:
 	kubectl apply -f ./$(DIR)/04_ingressroute.yaml
-ingressroute.teardown:
+ingressroute.delete:
 	kubectl delete -f ./$(DIR)/04_ingressroute.yaml
 ingressroute.clean:
 	rm -rf ./$(DIR)/04_ingressroute.yaml
-
-#get-traefik-ip:
-#ifeq ($(type), LoadBalancer)
-#TRAEFIK_IP=$(shell kubectl get svc -n api-gateway-system api-gateway -o=jsonpath='{.status.loadBalancer.ingress[0].ip}')
-#else ifeq ($(type), NodePort)
-#TRAEFIK_IP=$(shell kubectl get nodes --selector=node-role.kubernetes.io/master -o jsonpath='{.items[0].status.addresses[?(@.type=="InternalIP")].address}')
-#else
-#TRAEFIK_IP=$(shell kubectl get svc -n api-gateway-system api-gateway -o=jsonpath='{.spec.clusterIP}')
-#endif
-##
-#test: # get-traefik-ip
-#	-kubectl config use-context team-k8s
-#	-kubectl-ns api-gateway-system
-#	-kubectl get svc
