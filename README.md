@@ -68,9 +68,8 @@
 
 이름 | 내용 | 기본값
 | --- | --- | ---
-| HYPERAUTH | hyperauth 주소 | hyperauth.org
-| REALM | token 발급에 필요한 realm 이름 | tmax
-| CLIENT_ID | token 발급에 필요한 client id 이름 | hypercloud5
+| CONSOLE | 콘솔 접근 주소 | console 
+| MC_MODE | 멀티 클러스터(MC_MODE=true), 싱글 클러스터 설정(MC_MODE=false) | true
 
 ## 설치 순서 
 #### 아래 명령어를 순서에 맞게 입력 
