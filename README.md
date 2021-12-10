@@ -5,13 +5,7 @@
 - [구성 요소](#구성-요소)
 - [Prerequisites](#prerequisites)
 - [설치 가이드](#설치-방법)
-- [Step 0. INIT](#step-1-crd-생성)
-- [Step 1. TRAEFIK](#step-2-namespace-serviceaccount-clusterrole-clusterrolebinding-생성)
-- [Step 2. TLS](#step-3-job으로-secret-tls-생성)
-- [Step 3. CONSOLE](#step-4-service-load-balancer-생성)
-- [Step 4. INGRESSROUTE](#step-5-deployment-with-pod-template-생성)
-- [Step 5. 동작 확인](#step-6-동작-확인)
-- [삭제 가이드](#삭제-가이드)
+- [동작 확인](#동작-확인)
 - [설치 리소스 제거](#설치-리소스-제거)
 
 ## 구성 요소
@@ -34,7 +28,7 @@
 * Makefile.properties 안의 변수를 설정한다. 
   * 변수에 대한 설정은 [환경 변수](#환경-변수)를 참고해주세요. 
 * make 명령어를 사용해 필요한 모듈을 설치합니다.
-  * 설치 순서는 [설치 순서(#설치-순서)]를 참고해주세요. 
+  * 설치 순서는 [설치 순서](#설치-순서)를 참고해주세요. 
 
 ### 환경 변수
 * GATEWAY의 서비스 타입 변수
@@ -79,14 +73,36 @@
 | CLIENT_ID | token 발급에 필요한 client id 이름 | hypercloud5
 
 ## 설치 순서 
+#### 아래 명령어를 순서에 맞게 입력 
+1. 설치에 사용될 temp 폴더 생성
+   * `make dir.build`
+2. 네임스페이스, traefik crd, ca 인증서 생성 
+   * `make init.build `
+   * `make init.apply`
+3. traefik 생성 
+   * `make traefik.build`
+   * `make traefik.apply`
+4. gateway의 default 인증서 생성
+   * `make tls.build`
+   * `make tls.apply`
+5. console 생성 
+   * `make console.build`
+   * `make console.apply`
+6. ingressroutes 생성 
+   * `make ingressroute.build`
+   * `make ingressroute.apply`
 
-[comment]: <> (1. make dir.build)
+## 동작 확인 
+#### 아래 명령어로 traefik, console 정상 동작 확인 
+`kubectl -n api-gateway-system get pods`
+#### 아래 명령어로 console 접근 주소 확인 
+`kubectl get ingressroute -n api-gateway-system console-ingressroute -o jsonpath='{@.spec.routes[0].match}' | awk '{print $6}'`
+#### 조회된 주소로 접근하여 정상 동작 확인  
 
-[comment]: <> (  * 설치에 사용될 경로 생성 )
-
-[comment]: <> (2. make init.build)
-
-[comment]: <> (   * namespace, traefik crd, ca 인증서 yaml 파일 생성 )
-
-[comment]: <> (3. make init.apply )
-   
+## 설치 리소스 제거 
+#### 아래 명령어를 순서에 맞게 입력
+1. `make ingressroute.delete`
+2. `make console.delete`
+3. `make tls.delete`
+4. `make traefik.delete`
+5. `make init.delete`
