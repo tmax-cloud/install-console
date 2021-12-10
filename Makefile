@@ -19,8 +19,8 @@ init.clean:
 
 traefik.build: kustomize
 	cp -r manifest/01_TRAEFIK $(DIR)
-	find ./$(DIR)/01_TRAEFIK -name "*.yaml" -exec perl -pi -e 's/{{HYPERAUTH}}/$(HYPERAUTH)/g' {} \;
-	find ./$(DIR)/01_TRAEFIK -name "*.yaml" -exec perl -pi -e 's/{{REALM}}/$(REALM)/g' {} \;
+	find ./$(DIR)/01_TRAEFIK/base -name "*.yaml" -exec perl -pi -e 's/{{HYPERAUTH}}/$(HYPERAUTH)/g' {} \;
+	find ./$(DIR)/01_TRAEFIK/base -name "*.yaml" -exec perl -pi -e 's/{{REALM}}/$(REALM)/g' {} \;
 	cd ./$(DIR)/01_TRAEFIK/base && $(KUSTOMIZE) edit set image traefik=${TRAEFIK_IMG}
 	cd ./$(DIR)/01_TRAEFIK/base && $(KUSTOMIZE) edit set image tmaxcloudck/jwt-decode=${JWT_IMG}
 ifeq ($(SERVICE_TYPE), LoadBalancer)
