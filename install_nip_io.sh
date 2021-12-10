@@ -3,15 +3,18 @@
 # hyperauth.org 도메인 이름을 다른 이름으로 변경해서 사용 예) export HYPERAUTH=auth.tmaxcloudauth.org
 export HYPERAUTH=172.23.4.209:8443
 export SERVICE_TYPE=LoadBalancer
-export GATEWAY_TLS=nip_io
-#export DOMAIN_NAME=
+export DEFAULT_TLS_TYPE=nip_io
 
-make folder.deploy
-make init.deploy
+make dir.build
+make init.build
+make init.apply 
 sleep 10
-make traefik.deploy
+make traefik.build 
+make traefik.apply 
 sleep 30
-#export DNS=$(kubectl get svc -n api-gateway-system api-gateway -o=jsonpath='{.status.loadBalancer.ingress[0].ip}').nip.io
-make tls.deploy
-make console.deploy
-make ingressroute.deploy
+make tls.build 
+make tls.apply 
+make console.build 
+make console.apply 
+make ingressroute.build
+make ingressroute.apply 

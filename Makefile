@@ -70,11 +70,11 @@ endif
 tls.apply:
 ifeq ($(DEFAULT_TLS_TYPE), acme)
 	kubectl apply -f ./$(DIR)/02_tls_acme.yaml
-else ifeq ($(DEFALUT_TLS_TYPE), nip_io)
+else ifeq ($(DEFAULT_TLS_TYPE), nip_io)
 	kubectl apply -f ./$(DIR)/02_tls_nip_io.yaml
 else ifeq ($(DEFAULT_TLS_TYPE), selfsigned)
 	kubectl apply -f ./$(DIR)/02_tls_selfsigned.yaml
-else ifeq ($(DEFALUT_TLS_TYPE), none)
+else ifeq ($(DEFAULT_TLS_TYPE), none)
 	@echo "Use the default tls created by Traefik which generated automatically."
 else
 	@echo "Error: Must be one of (acme, nip_io, selfsigned, none)"
@@ -83,7 +83,7 @@ endif
 tls.delete:
 ifeq ($(DEFAULT_TLS_TYPE), acme)
 	kubectl delete -f ./$(DIR)/02_tls_acme.yaml
-else ifeq ($(DEFALUT_TLS_TYPE), nip_io)
+else ifeq ($(DEFAULT_TLS_TYPE), nip_io)
 	kubectl delete -f ./$(DIR)/02_tls_nip_io.yaml
 else ifeq ($(DEFAULT_TLS_TYPE), selfsigned)
 	kubectl delete -f ./$(DIR)/02_tls_selfsigned.yaml

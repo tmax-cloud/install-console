@@ -60,7 +60,7 @@
 | REGISTRY | 이미지 저장소 | docker.io
 | TRAEFIK_VERSION | gateway의 핵심 모듈인 traefik 이미지 버전 | v.2.5.4 
 | CONSOLE_VERSION | hypercloud-console 이미지 버전 | 5.0.40.0
-| JWT_VERSION | jwt 토큰 검증에 상요되는 이미지 버전 | 5.0.0.1 
+| JWT_VERSION | jwt 토큰 검증에 사용되는 이미지 버전 | 5.0.0.1 
 
 * HYPERAUTH와 연결에 사용되는 변수
 
