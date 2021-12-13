@@ -18,7 +18,8 @@
     * jwt-decode:5.1.0.1
 
 ## Prerequisites
-* Kubernetes, cert-manager, hyperauth (Keycloak), HyperCloud api servier, Prometheus가 설치되어 있어야 합니다.
+* Kubernetes, cert-manager가 설치 되어 있어야 합니다.
+* console 원할한 접속을 위해 hyperauth (Keycloak), HyperCloud api servier, Prometheus가 설치되어 있어야 합니다.
 * 온전한 화면을 위해 추가로 grafana, istio(Kiali, Jaeger), kibana, kubeflow, gitlab 설치가 추가로 필요합니다.
 * 추가 모듈은 모두 인그레스로 생성되어 있어야합니다.
 * LoadBalancer 타입에 사용할 IP 여유분이 1개 있어야합니다. 
