@@ -19,8 +19,8 @@ init.clean:
 
 traefik.build: kustomize
 	cp -r manifest/01_TRAEFIK $(DIR)/01_TRAEFIK
-	find ./$(DIR)/01_TRAEFIK/base -name "*.yaml" -exec perl -pi -e 's/{{HYPERAUTH}}/$(HYPERAUTH)/g' {} \;
-	find ./$(DIR)/01_TRAEFIK/base -name "*.yaml" -exec perl -pi -e 's/{{REALM}}/$(REALM)/g' {} \;
+	find ./$(DIR)/01_TRAEFIK/base -name "*.yaml" -exec perl -pi -e 's/\{\{HYPERAUTH\}\}/$(HYPERAUTH)/g' {} \;
+	find ./$(DIR)/01_TRAEFIK/base -name "*.yaml" -exec perl -pi -e 's/\{\{REALM\}\}/$(REALM)/g' {} \;
 	cd ./$(DIR)/01_TRAEFIK/base && $(KUSTOMIZE) edit set image traefik=${TRAEFIK_IMG}
 	cd ./$(DIR)/01_TRAEFIK/base && $(KUSTOMIZE) edit set image tmaxcloudck/jwt-decode=${JWT_IMG}
 ifeq ($(SERVICE_TYPE), LoadBalancer)
@@ -44,21 +44,21 @@ ifeq	($(DOMAIN_NAME),)
 	@echo "Error: DOMAIN_NAME is empty"
 	exit 1
 else
-	find ./$(DIR)/02_TLS/acme -name "*.yaml" -exec perl -pi -e 's/{{EMAIL}}/$(EMAIL)/g' {} \;
-	find ./$(DIR)/02_TLS/acme -name "*.yaml" -exec perl -pi -e 's/{{ACCESS_KEY_ID}}/$(ACCESS_KEY_ID)/g' {} \;
-	find ./$(DIR)/02_TLS/acme -name "secret_access_key" -exec perl -pi -e 's/{{SECRET_ACCESS_KEY}}/$(SECRET_ACCESS_KEY)/g' {} \;
-	find ./$(DIR)/02_TLS/acme -name "*.yaml" -exec perl -pi -e 's/{{DOMAIN_NAME}}/$(DOMAIN_NAME)/g' {} \;
+	find ./$(DIR)/02_TLS/acme -name "*.yaml" -exec perl -pi -e 's/\{\{EMAIL\}\}/$(EMAIL)/g' {} \;
+	find ./$(DIR)/02_TLS/acme -name "*.yaml" -exec perl -pi -e 's/\{\{ACCESS_KEY_ID\}\}/$(ACCESS_KEY_ID)/g' {} \;
+	find ./$(DIR)/02_TLS/acme -name "secret_access_key" -exec perl -pi -e 's/\{\{SECRET_ACCESS_KEY\}\}/$(SECRET_ACCESS_KEY)/g' {} \;
+	find ./$(DIR)/02_TLS/acme -name "*.yaml" -exec perl -pi -e 's/\{\{DOMAIN_NAME\}\}/$(DOMAIN_NAME)/g' {} \;
 	$(KUSTOMIZE) build --reorder none ./$(DIR)/02_TLS/acme > ./$(DIR)/02_tls_acme.yaml
 endif
 else ifeq ($(DEFAULT_TLS_TYPE), nip_io)
-	find ./$(DIR)/02_TLS/nip_io -name "*.yaml" -exec perl -pi -e 's/{{TRAEFIK_IP}}/$(TRAEFIK_IP)/g' {} \;
+	find ./$(DIR)/02_TLS/nip_io -name "*.yaml" -exec perl -pi -e 's/\{\{TRAEFIK_IP\}\}/$(TRAEFIK_IP)/g' {} \;
 	$(KUSTOMIZE) build --reorder none ./$(DIR)/02_TLS/nip_io > ./$(DIR)/02_tls_nip_io.yaml
 else ifeq ($(DEFAULT_TLS_TYPE), selfsigned)
 ifeq	($(DOMAIN_NAME),)
 	@echo "Error: DOMAIN_NAME is empty"
 	exit 1
 else
-	find ./$(DIR)/02_TLS/selfsigned -name "*.yaml" -exec perl -pi -e 's/{{DOMAIN_NAME}}/$(DOMAIN_NAME)/g' {} \;
+	find ./$(DIR)/02_TLS/selfsigned -name "*.yaml" -exec perl -pi -e 's/\{\{DOMAIN_NAME\}\}/$(DOMAIN_NAME)/g' {} \;
 	$(KUSTOMIZE) build --reorder none ./$(DIR)/02_TLS/selfsigned > ./$(DIR)/02_tls_selfsigned.yaml
 endif
 else ifeq ($(DEFAULT_TLS_TYPE), none)
@@ -96,10 +96,10 @@ tls.clean:
 
 console.build: kustomize
 	cp -r manifest/03_CONSOLE $(DIR)/03_CONSOLE
-	find ./$(DIR)/03_CONSOLE -name "*.yaml" -exec perl -pi -e 's/{{HYPERAUTH}}/$(HYPERAUTH)/g' {} \;
-	find ./$(DIR)/03_CONSOLE -name "*.yaml" -exec perl -pi -e 's/{{CLIENT_ID}}/$(CLIENT_ID)/g' {} \;
-	find ./$(DIR)/03_CONSOLE -name "*.yaml" -exec perl -pi -e 's/{{REALM}}/$(REALM)/g' {} \;
-	find ./$(DIR)/03_CONSOLE -name "*.yaml" -exec perl -pi -e 's/{{MC_MODE}}/$(MC_MODE)/g' {} \;
+	find ./$(DIR)/03_CONSOLE -name "*.yaml" -exec perl -pi -e 's/\{\{HYPERAUTH\}\}/$(HYPERAUTH)/g' {} \;
+	find ./$(DIR)/03_CONSOLE -name "*.yaml" -exec perl -pi -e 's/\{\{CLIENT_ID\}\}/$(CLIENT_ID)/g' {} \;
+	find ./$(DIR)/03_CONSOLE -name "*.yaml" -exec perl -pi -e 's/\{\{REALM\}\}/$(REALM)/g' {} \;
+	find ./$(DIR)/03_CONSOLE -name "*.yaml" -exec perl -pi -e 's/\{\{MC_MODE\}\}/$(MC_MODE)/g' {} \;
 	cd ./$(DIR)/03_CONSOLE/base && $(KUSTOMIZE) edit set image tmaxcloudck/hypercloud-console=${CONSOLE_IMG}
 	$(KUSTOMIZE) build --reorder none ./$(DIR)/03_CONSOLE/base > ./$(DIR)/03_console.yaml
 console.apply:
@@ -111,7 +111,7 @@ console.clean:
 
 ingressroute.build: kustomize
 	cp -r manifest/04_INGRESSROUTE $(DIR)/04_INGRESSROUTE
-	find ./$(DIR)/04_INGRESSROUTE -name "*.yaml" -exec perl -pi -e 's/{{CONSOLE}}/$(CONSOLE)/g' {} \;	
+	find ./$(DIR)/04_INGRESSROUTE -name "*.yaml" -exec perl -pi -e 's/\{\{CONSOLE\}\}/$(CONSOLE)/g' {} \;	
 ifeq ($(DEFAULT_TLS_TYPE), nip_io)
 	$(KUSTOMIZE) build --reorder none ./$(DIR)/04_INGRESSROUTE/nip_io > ./$(DIR)/04_ingressroute.yaml
 else ifeq ($(DEFAULT_TLS_TYPE), acme)
@@ -119,7 +119,7 @@ ifeq	($(DOMAIN_NAME),)
 	@echo "Error: DOMAIN_NAME is empty"
 	exit 1
 else
-	find ./$(DIR)/04_INGRESSROUTE/base -name "*.yaml" -exec perl -pi -e 's/{{DOMAIN_NAME}}/$(DOMAIN_NAME)/g' {} \;	
+	find ./$(DIR)/04_INGRESSROUTE/base -name "*.yaml" -exec perl -pi -e 's/\{\{DOMAIN_NAME\}\}/$(DOMAIN_NAME)/g' {} \;	
 	$(KUSTOMIZE) build --reorder none ./$(DIR)/04_INGRESSROUTE/base > ./$(DIR)/04_ingressroute.yaml
 endif
 else ifeq ($(DEFAULT_TLS_TYPE), selfsigned)
@@ -127,14 +127,14 @@ ifeq	($(DOMAIN_NAME),)
 	@echo "Error: DOMAIN_NAME is empty"
 	exit 1
 else
-	find ./$(DIR)/04_INGRESSROUTE/base -name "*.yaml" -exec perl -pi -e 's/{{DOMAIN_NAME}}/$(DOMAIN_NAME)/g' {} \;	
+	find ./$(DIR)/04_INGRESSROUTE/base -name "*.yaml" -exec perl -pi -e 's/\{\{DOMAIN_NAME\}\}/$(DOMAIN_NAME)/g' {} \;	
 	$(KUSTOMIZE) build --reorder none ./$(DIR)/04_INGRESSROUTE/base > ./$(DIR)/04_ingressroute.yaml
 endif
 else ifeq ($(DEFAULT_TLS_TYPE), none)
 ifeq	($(DOMAIN_NAME),)
 	$(KUSTOMIZE) build --reorder none ./$(DIR)/04_INGRESSROUTE/none_host > ./$(DIR)/04_ingressroute.yaml
 else
-	find ./$(DIR)/04_INGRESSROUTE/base -name "*.yaml" -exec perl -pi -e 's/{{DOMAIN_NAME}}/$(DOMAIN_NAME)/g' {} \;	
+	find ./$(DIR)/04_INGRESSROUTE/base -name "*.yaml" -exec perl -pi -e 's/\{\{DOMAIN_NAME\}\}/$(DOMAIN_NAME)/g' {} \;	
 	$(KUSTOMIZE) build --reorder none ./$(DIR)/04_INGRESSROUTE/base > ./$(DIR)/04_ingressroute.yaml
 endif
 else
