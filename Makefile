@@ -8,7 +8,7 @@ dir.clean:
 	rm -rf ./$(DIR)
 
 init.build:
-	cp -r manifest/00_INIT $(DIR)
+	cp -r manifest/00_INIT $(DIR)/00_INIT
 	$(KUSTOMIZE) build --reorder none ./$(DIR)/00_INIT/base > ./$(DIR)/00_init.yaml
 init.apply: 
 	kubectl apply -f ./$(DIR)/00_init.yaml
@@ -18,7 +18,7 @@ init.clean:
 	rm -rf ./$(DIR)/00_init.yaml
 
 traefik.build: kustomize
-	cp -r manifest/01_TRAEFIK $(DIR)
+	cp -r manifest/01_TRAEFIK $(DIR)/01_TRAEFIK
 	find ./$(DIR)/01_TRAEFIK/base -name "*.yaml" -exec perl -pi -e 's/{{HYPERAUTH}}/$(HYPERAUTH)/g' {} \;
 	find ./$(DIR)/01_TRAEFIK/base -name "*.yaml" -exec perl -pi -e 's/{{REALM}}/$(REALM)/g' {} \;
 	cd ./$(DIR)/01_TRAEFIK/base && $(KUSTOMIZE) edit set image traefik=${TRAEFIK_IMG}
@@ -38,7 +38,7 @@ traefik.clean:
 	rm -rf ./$(DIR)/01_traefik.yaml
 
 tls.build: kustomize
-	cp -r manifest/02_TLS $(DIR)
+	cp -r manifest/02_TLS $(DIR)/02_TLS
 ifeq ($(DEFAULT_TLS_TYPE), acme)
 ifeq	($(DOMAIN_NAME),)
 	@echo "Error: DOMAIN_NAME is empty"
@@ -95,7 +95,7 @@ tls.clean:
 	rm -rf ./$(DIR)/02_tls_*.yaml
 
 console.build: kustomize
-	cp -r manifest/03_CONSOLE $(DIR)	
+	cp -r manifest/03_CONSOLE $(DIR)/03_CONSOLE
 	find ./$(DIR)/03_CONSOLE -name "*.yaml" -exec perl -pi -e 's/{{HYPERAUTH}}/$(HYPERAUTH)/g' {} \;
 	find ./$(DIR)/03_CONSOLE -name "*.yaml" -exec perl -pi -e 's/{{CLIENT_ID}}/$(CLIENT_ID)/g' {} \;
 	find ./$(DIR)/03_CONSOLE -name "*.yaml" -exec perl -pi -e 's/{{REALM}}/$(REALM)/g' {} \;
@@ -110,7 +110,7 @@ console.clean:
 	rm -rf ./$(DIR)/03_console.yaml
 
 ingressroute.build: kustomize
-	cp -r manifest/04_INGRESSROUTE $(DIR)	
+	cp -r manifest/04_INGRESSROUTE $(DIR)/04_INGRESSROUTE
 	find ./$(DIR)/04_INGRESSROUTE -name "*.yaml" -exec perl -pi -e 's/{{CONSOLE}}/$(CONSOLE)/g' {} \;	
 ifeq ($(DEFAULT_TLS_TYPE), nip_io)
 	$(KUSTOMIZE) build --reorder none ./$(DIR)/04_INGRESSROUTE/nip_io > ./$(DIR)/04_ingressroute.yaml
