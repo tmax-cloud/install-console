@@ -23,7 +23,7 @@ data:
               - "admin:$apr1$WboCaB7Z$PJbsvKlI3XMq12xMeQMmG."
         jwt-decode-auth:
           forwardAuth:
-            address: "http://localhost:8080"
+            address: "http://jwt-decode-auth.api-gateway-system.svc:8080"
             authResponseHeaders:
               - jwt-token-validated
               - Authorization

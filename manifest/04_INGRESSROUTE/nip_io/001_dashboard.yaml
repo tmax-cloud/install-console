@@ -8,7 +8,7 @@ spec:
   entryPoints:
     - traefik
   routes:
-    - match: PathPrefix(`/api`, `/dashboard`, `/`) && HostRegexp(`{{CONSOLE}}.{ip:.*}.nip.io`)
+    - match: PathPrefix(`/api`, `/dashboard`, `/`) && HostRegexp(`dashboard.{ip:.*}.nip.io`)
       kind: Rule
       services:
         - name: api@internal
