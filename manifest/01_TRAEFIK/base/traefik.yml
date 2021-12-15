@@ -6,14 +6,6 @@ http:
       serverName: tmax-cloud
       rootCAs:
         - /run/secrets/tmaxcloud/ca.crt
-    kubernetes:http:
-  serversTransports:
-    insecure:
-      insecureSkipVerify: true
-    tmaxcloud:
-      serverName: tmax-cloud
-      rootCAs:
-        - /run/secrets/tmaxcloud/ca.crt
     kubernetes:
       rootCAs:
         - /run/secrets/kubernetes.io/serviceaccount/ca.crt
@@ -40,54 +32,6 @@ http:
         accessControlAllowHeaders:
           - "*"
         #          - "include"
-        accessControlMaxAge: 100
-        addVaryHeader: true
-    hypercloud-stripprefix:
-      stripPrefix:
-        prefixes:
-          - "/api/hypercloud"
-          - "/api/multi-hypercloud"
-          - "/api/webhook"
-    kubernetes-stripprefix:
-      stripPrefix:
-        prefixes:
-          - "/api/kubernetes"
-        forceSlash: true
-    monitoring-stripprefix:
-      stripPrefix:
-        prefixes:
-          - "/api/prometheus"
-          - "/api/alertmanager"
-    monitoring-stripprefix-tenancy:
-      stripPrefix:
-        prefixes:
-          - "/api/prometheus-tenancy"
-
-      rootCAs:
-        - /run/secrets/kubernetes.io/serviceaccount/ca.crt
-  middlewares:
-    dashboard-auth:
-      basicAuth:
-        users:
-          - "admin:$apr1$WboCaB7Z$PJbsvKlI3XMq12xMeQMmG."
-    jwt-decode-auth:
-      forwardAuth:
-        address: "http://localhost:8080"
-        authResponseHeaders:
-          - jwt-token-validated
-          - Authorization
-        trustForwardHeader: true
-        tls:
-          insecureSkipVerify: true
-    cors-header:
-      headers:
-        accessControlAllowMethods:
-          - "*"
-#        accessControlAllowOriginList:
-#          - "*"
-        accessControlAllowHeaders:
-          - "*"
-#          - "include"
         accessControlMaxAge: 100
         addVaryHeader: true
     hypercloud-stripprefix:
