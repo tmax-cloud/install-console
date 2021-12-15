@@ -16,12 +16,11 @@ spec:
     - key encipherment
     - server auth
     - client auth
-  ipAddresses:
-    - {{TRAEFIK_IP}}
   dnsNames:
     - "tmax-cloud"
     - "nip.io"
-    - "*.nip.io"
+    - "{{TRAEFIK_IP}}.nip.io"
+    - "*.{{TRAEFIK_IP}}.nip.io"
   issuerRef:
     kind: ClusterIssuer
     group: cert-manager.io

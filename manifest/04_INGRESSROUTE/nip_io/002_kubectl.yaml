@@ -9,7 +9,7 @@ spec:
     - k8s
   routes:
     - kind: Rule
-      match: PathPrefix(`/`) && HostRegexp(`{{CONSOLE}}.{ip:.*}.nip.io`)
+      match: PathPrefix(`/`) && HostRegexp(`kubernetes.{ip:.*}.nip.io`)
       services:
         - name: kubernetes
           namespace: default

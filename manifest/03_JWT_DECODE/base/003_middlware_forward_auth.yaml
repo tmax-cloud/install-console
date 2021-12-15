@@ -1,0 +1,15 @@
+#---
+#apiVersion: traefik.containo.us/v1alpha1
+#kind: Middleware
+#metadata:
+#  name: jwt-decode-auth
+#  namespace: api-gateway-system
+#spec:
+#  forwardAuth:
+#    address: http://jwt-decode-auth.api-gateway-system.svc:8080
+#    authResponseHeaders:
+#      - jwt-token-validated
+#      - Authorization
+#    trustForwardHeader: true
+#    tls:
+#      insecureSkipVerify: true

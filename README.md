@@ -19,6 +19,8 @@
 
 ## Prerequisites
 * Kubernetes, cert-manager가 설치 되어 있어야 합니다.
+  * hyperauth를 api-gateway가 설치된 클러스터에 ingress로 생성할 경우, [설치 순서](#설치-순서) 1-3을 완료 후 hyperauth 설치를 진행하세요. 
+  * ingress주소로 hyperauth에 접속 됨을 확인한 후, hyperauth, realm, clientid를 입력 한 후 [설치 순서](#설치-순서) 4-7를 진행하세요. 
 * console 원할한 접속을 위해 hyperauth (Keycloak), HyperCloud api servier, Prometheus가 설치되어 있어야 합니다.
 * 온전한 화면을 위해 추가로 grafana, istio(Kiali, Jaeger), kibana, kubeflow, gitlab 설치가 추가로 필요합니다.
 * 추가 모듈은 모두 인그레스로 생성되어 있어야합니다.
@@ -82,13 +84,18 @@
 3. traefik 생성 
    * `make traefik.build`
    * `make traefik.apply`
+***
+   아래 순서부턴 hyperauth 주소, realm, client 필요 
 4. gateway의 default 인증서 생성
    * `make tls.build`
    * `make tls.apply`
-5. console 생성 
+5. jwt-decode-auth 생성 
+   * `make jwt.build`
+   * `make jwt.apply`
+6. console 생성 
    * `make console.build`
    * `make console.apply`
-6. ingressroutes 생성 
+7. ingressroutes 생성 
    * `make ingressroute.build`
    * `make ingressroute.apply`
 
@@ -103,6 +110,7 @@
 #### 아래 명령어를 순서에 맞게 입력
 1. `make ingressroute.delete`
 2. `make console.delete`
-3. `make tls.delete`
-4. `make traefik.delete`
-5. `make init.delete`
+3. `make jwt.delete`
+4. `make tls.delete`
+5. `make traefik.delete`
+6. `make init.delete`

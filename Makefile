@@ -16,13 +16,11 @@ init.delete:
 	kubectl delete -f ./$(DIR)/00_intit.yaml
 init.clean:
 	rm -rf ./$(DIR)/00_init.yaml
+	rm -rf ./$(DIR)/00_INIT
 
 traefik.build: kustomize
 	cp -r manifest/01_TRAEFIK $(DIR)/01_TRAEFIK
-	find ./$(DIR)/01_TRAEFIK/base -name "*.yaml" -exec perl -pi -e 's/\{\{HYPERAUTH\}\}/$(HYPERAUTH)/g' {} \;
-	find ./$(DIR)/01_TRAEFIK/base -name "*.yaml" -exec perl -pi -e 's/\{\{REALM\}\}/$(REALM)/g' {} \;
 	cd ./$(DIR)/01_TRAEFIK/base && $(KUSTOMIZE) edit set image traefik=${TRAEFIK_IMG}
-	cd ./$(DIR)/01_TRAEFIK/base && $(KUSTOMIZE) edit set image tmaxcloudck/jwt-decode=${JWT_IMG}
 ifeq ($(SERVICE_TYPE), LoadBalancer)
 	$(KUSTOMIZE) build --reorder none ./$(DIR)/01_TRAEFIK/base > ./$(DIR)/01_traefik.yaml
 else ifeq ($(SERVICE_TYPE), NodePort)
@@ -36,6 +34,7 @@ traefik.delete:
 	kubectl delete -f ./$(DIR)/01_traefik.yaml
 traefik.clean:
 	rm -rf ./$(DIR)/01_traefik.yaml
+	rm -rf ./$(DIR)/01_TRAEFIK
 
 tls.build: kustomize
 	cp -r manifest/02_TLS $(DIR)/02_TLS
@@ -93,21 +92,37 @@ else
 endif
 tls.clean:
 	rm -rf ./$(DIR)/02_tls_*.yaml
+	rm -rf ./$(DIR)/02_TLS
+
+jwt.build: kustomize
+	cp -r manifest/03_JWT_DECODE $(DIR)/03_JWT_DECODE
+	find ./$(DIR)/03_JWT_DECODE -name "*.yaml" -exec perl -pi -e 's/\{\{HYPERAUTH\}\}/$(HYPERAUTH)/g' {} \;
+	find ./$(DIR)/03_JWT_DECODE -name "*.yaml" -exec perl -pi -e 's/\{\{REALM\}\}/$(REALM)/g' {} \;
+	cd ./$(DIR)/03_JWT_DECODE/base && $(KUSTOMIZE) edit set image tmaxcloudck/jwt-decode=${JWT_IMG}
+	$(KUSTOMIZE) build --reorder none ./$(DIR)/03_JWT_DECODE/base > ./$(DIR)/03_jwt_decode.yaml
+jwt.apply:
+	kubectl apply -f ./$(DIR)/03_jwt_decode.yaml
+jwt.delete:
+	kubectl delete -f ./$(DIR)/03_jwt_decode.yaml
+jwt.clean:
+	rm -rf ./$(DIR)/03_jwt_decode.yaml
+	rm -rf ./$(DIR)/03_JWT_DECODE
 
 console.build: kustomize
-	cp -r manifest/03_CONSOLE $(DIR)/03_CONSOLE
-	find ./$(DIR)/03_CONSOLE -name "*.yaml" -exec perl -pi -e 's/\{\{HYPERAUTH\}\}/$(HYPERAUTH)/g' {} \;
-	find ./$(DIR)/03_CONSOLE -name "*.yaml" -exec perl -pi -e 's/\{\{CLIENT_ID\}\}/$(CLIENT_ID)/g' {} \;
-	find ./$(DIR)/03_CONSOLE -name "*.yaml" -exec perl -pi -e 's/\{\{REALM\}\}/$(REALM)/g' {} \;
-	find ./$(DIR)/03_CONSOLE -name "*.yaml" -exec perl -pi -e 's/\{\{MC_MODE\}\}/$(MC_MODE)/g' {} \;
-	cd ./$(DIR)/03_CONSOLE/base && $(KUSTOMIZE) edit set image tmaxcloudck/hypercloud-console=${CONSOLE_IMG}
-	$(KUSTOMIZE) build --reorder none ./$(DIR)/03_CONSOLE/base > ./$(DIR)/03_console.yaml
+	cp -r manifest/04_CONSOLE $(DIR)/04_CONSOLE
+	find ./$(DIR)/04_CONSOLE -name "*.yaml" -exec perl -pi -e 's/\{\{HYPERAUTH\}\}/$(HYPERAUTH)/g' {} \;
+	find ./$(DIR)/04_CONSOLE -name "*.yaml" -exec perl -pi -e 's/\{\{CLIENT_ID\}\}/$(CLIENT_ID)/g' {} \;
+	find ./$(DIR)/04_CONSOLE -name "*.yaml" -exec perl -pi -e 's/\{\{REALM\}\}/$(REALM)/g' {} \;
+	find ./$(DIR)/04_CONSOLE -name "*.yaml" -exec perl -pi -e 's/\{\{MC_MODE\}\}/$(MC_MODE)/g' {} \;
+	cd ./$(DIR)/04_CONSOLE/base && $(KUSTOMIZE) edit set image tmaxcloudck/hypercloud-console=${CONSOLE_IMG}
+	$(KUSTOMIZE) build --reorder none ./$(DIR)/04_CONSOLE/base > ./$(DIR)/04_console.yaml
 console.apply:
-	kubectl apply -f ./$(DIR)/03_console.yaml
+	kubectl apply -f ./$(DIR)/04_console.yaml
 console.delete:
-	kubectl delete -f ./$(DIR)/03_console.yaml
+	kubectl delete -f ./$(DIR)/04_console.yaml
 console.clean:
-	rm -rf ./$(DIR)/03_console.yaml
+	rm -rf ./$(DIR)/04_console.yaml
+	rm -rf ./$(DIR)/04_CONSOLE
 
 ingressroute.build: kustomize
 	cp -r manifest/04_INGRESSROUTE $(DIR)/04_INGRESSROUTE
@@ -147,3 +162,4 @@ ingressroute.delete:
 	kubectl delete -f ./$(DIR)/04_ingressroute.yaml
 ingressroute.clean:
 	rm -rf ./$(DIR)/04_ingressroute.yaml
+	rm -rf ./$(DIR)/04_INGRESSROUTE

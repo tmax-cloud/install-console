@@ -6,7 +6,7 @@ metadata:
   namespace: api-gateway-system
 spec:
   secretName: gateway-tls
-  commonName: { { DOMAIN_NAME } }
+  commonName: "{{DOMAIN_NAME}}"
   subject:
     organizations:
       - "tmax-cloud"
@@ -17,7 +17,6 @@ spec:
     - server auth
     - client auth
   dnsNames:
-    - "tmax-cloud"
     - "{{DOMAIN_NAME}}"
     - "*.{{DOMAIN_NAME}}"
   issuerRef:
