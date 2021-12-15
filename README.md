@@ -85,7 +85,8 @@
    * `make traefik.build`
    * `make traefik.apply`
 ***
-   아래 순서부턴 hyperauth 주소, realm, client 필요 
+아래 순서부턴 hyperauth 주소, realm, client 필요 
+
 4. gateway의 default 인증서 생성
    * `make tls.build`
    * `make tls.apply`
