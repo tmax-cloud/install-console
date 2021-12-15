@@ -1,6 +1,6 @@
 # when having your own domain
 # Create secret
-# kubectl create secret generic route53-secret --namespace cert-manager --from-literal=secret-access-key="wIBzZ2j8j7O2xiGAS1Ulw8I1n4LzMUjy3VXVjYJ6"
+# kubectl create secret generic route53-secret --namespace cert-manager --from-literal=secretkey"
 ## setting
 ## https://voyagermesh.com/docs/v12.0.0/guides/cert-manager/dns01_challenge/aws-route53/
 ---
