@@ -7,7 +7,7 @@ dir.build:
 dir.clean:
 	rm -rf ./$(DIR)
 
-init.build:
+init.build: kustomize
 	cp -r manifest/00_INIT $(DIR)/00_INIT
 	$(KUSTOMIZE) build --reorder none ./$(DIR)/00_INIT/base > ./$(DIR)/00_init.yaml
 init.apply: 
