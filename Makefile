@@ -13,7 +13,7 @@ init.build: kustomize
 init.apply: 
 	kubectl apply -f ./$(DIR)/00_init.yaml
 init.delete:
-	kubectl delete -f ./$(DIR)/00_intit.yaml
+	kubectl delete -f ./$(DIR)/00_init.yaml
 init.clean:
 	rm -rf ./$(DIR)/00_init.yaml
 	rm -rf ./$(DIR)/00_INIT
