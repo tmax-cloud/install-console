@@ -39,6 +39,10 @@
 이름 | 내용 | 기본값  
 | --- | --- | ---
 | SERVICE_TYPE | GATEWAY 의 서비스 타입 (LoadBalancer, NodePort, ClusterIP) | LoadBalancer 
+| DASHBOARD_PORT | NodePort로 서비스 타입 생성 시 dashboard의 nodeport 지정  | 31900
+| HTTP_PORT | NodePort로 서비스 타입 생성 시 http의 nodeport 지정 | 31080
+| HTTPS_PORT | NodePort로 서비스 타입 생성 시 https의 nodeport 지정 | 31433
+| K8S_PORT | NodePort로 서비스 타입 생성 시 k8s의 nodeport 지정 | 31643
 
 * GATEWAY의 기본 TLS 인증서 생성에 필요한 변수
 

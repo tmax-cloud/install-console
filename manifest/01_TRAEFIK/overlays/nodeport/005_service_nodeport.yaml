@@ -5,3 +5,28 @@ metadata:
   namespace: api-gateway-system
 spec:
   type: NodePort
+  ports:
+    - name: traefik
+      port: 9000
+      protocol: TCP
+      targetPort: traefik
+      nodePort: {{DASHBOARD_PORT}}
+    - name: web
+      port: 80
+      protocol: TCP
+      targetPort: web
+      nodePort: {{HTTP_PORT}}
+    - name: websecure
+      port: 443
+      protocol: TCP
+      targetPort: websecure
+      nodePort: {{HTTPS_PORT}}
+    - name: k8s
+      port: 6443
+      protocol: TCP
+      targetPort: k8s
+      nodePort: {{K8S_PORT}}
+  selector:
+    app: traefik
+  sessionAffinity: None
+  type: LoadBalancer

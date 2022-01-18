@@ -24,6 +24,10 @@ traefik.build: kustomize
 ifeq ($(SERVICE_TYPE), LoadBalancer)
 	$(KUSTOMIZE) build --reorder none ./$(DIR)/01_TRAEFIK/base > ./$(DIR)/01_traefik.yaml
 else ifeq ($(SERVICE_TYPE), NodePort)
+	find ./$(DIR)/01_TRAEFIK/overlays/nodeport -name "*.yaml" -exec perl -pi -e 's/\{\{DASHBOARD_PORT\}\}/$(DASHBOARD_PORT)/g' {} \;
+	find ./$(DIR)/01_TRAEFIK/overlays/nodeport -name "*.yaml" -exec perl -pi -e 's/\{\{HTTP_PORT\}\}/$(HTTP_PORT)/g' {} \;
+	find ./$(DIR)/01_TRAEFIK/overlays/nodeport -name "*.yaml" -exec perl -pi -e 's/\{\{HTTPS_PORT\}\}/$(HTTPS_PORT)/g' {} \;
+	find ./$(DIR)/01_TRAEFIK/overlays/nodeport -name "*.yaml" -exec perl -pi -e 's/\{\{K8S_PORT\}\}/$(K8S_PORT)/g' {} \;
 	$(KUSTOMIZE) build --reorder none ./$(DIR)/01_TRAEFIK/overlays/nodeport > ./$(DIR)/01_traefik.yaml
 else
 	$(KUSTOMIZE) build --reorder none ./$(DIR)/01_TRAEFIK/overlays/clusterip > ./$(DIR)/01_traefik.yaml
