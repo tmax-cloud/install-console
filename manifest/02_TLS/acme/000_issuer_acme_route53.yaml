@@ -22,4 +22,4 @@ spec:
             accessKeyID: {{ACCESS_KEY_ID}}
             secretAccessKeySecretRef:
               name: route53-secret
-              key: secret-access-key
+              key: secret_access_key
