@@ -58,3 +58,4 @@ spec:
             - name: jwt-decode-auth
               protocol: TCP
               containerPort: 8080
+      serviceAccountName: console              
