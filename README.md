@@ -14,7 +14,7 @@
 * jwt-decode ([tmaxcloudck/jwd-decode](https://hub.docker.com/r/tmaxcloudck/jwt-decode/tags))
 * 가이드 작성 시점(2021/12/09) 최신 버전은 아래와 같습니다. 
     * traefik:v2.5.4
-    * hypercloud-console:5.0.41.0
+    * hypercloud-console:5.0.51.0
     * jwt-decode:5.1.0.1
 
 ## Prerequisites
@@ -77,7 +77,7 @@
 | --- | --- | ---
 | CONSOLE | 콘솔 접근 주소 | console 
 | MC_MODE | 멀티 클러스터(MC_MODE=true), 싱글 클러스터 설정(MC_MODE=false) | true
-| CUSTOM_PRODUCT_NAME | 제품 로고 (hypercloud 혹은 supercloud 중 하나로 기입) | hypercloud
+| CUSTOM_PRODUCT_NAME | 제품 로고 (hypercloud 혹은 supercloud 중 하나로 기입) ** 5.0.51.0 이상 버전부터 적용 | hypercloud
 
 ## 설치 순서 
 #### 아래 명령어를 순서에 맞게 입력 
