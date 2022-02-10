@@ -77,6 +77,7 @@
 | --- | --- | ---
 | CONSOLE | 콘솔 접근 주소 | console 
 | MC_MODE | 멀티 클러스터(MC_MODE=true), 싱글 클러스터 설정(MC_MODE=false) | true
+| CUSTOM_PRODUCT_NAME | 제품 로고 (hypercloud 혹은 supercloud 중 하나로 기입) | hypercloud
 
 ## 설치 순서 
 #### 아래 명령어를 순서에 맞게 입력 

@@ -118,6 +118,7 @@ console.build: kustomize
 	find ./$(DIR)/04_CONSOLE -name "*.yaml" -exec perl -pi -e 's/\{\{CLIENT_ID\}\}/$(CLIENT_ID)/g' {} \;
 	find ./$(DIR)/04_CONSOLE -name "*.yaml" -exec perl -pi -e 's/\{\{REALM\}\}/$(REALM)/g' {} \;
 	find ./$(DIR)/04_CONSOLE -name "*.yaml" -exec perl -pi -e 's/\{\{MC_MODE\}\}/$(MC_MODE)/g' {} \;
+	find ./$(DIR)/04_CONSOLE -name "*.yaml" -exec perl -pi -e 's/\{\{CUSTOM_PRODUCT_NAME\}\}/$(CUSTOM_PRODUCT_NAME)/g' {} \;
 	cd ./$(DIR)/04_CONSOLE/base && $(KUSTOMIZE) edit set image tmaxcloudck/hypercloud-console=${CONSOLE_IMG}
 	$(KUSTOMIZE) build --reorder none ./$(DIR)/04_CONSOLE/base > ./$(DIR)/04_console.yaml
 console.apply:
