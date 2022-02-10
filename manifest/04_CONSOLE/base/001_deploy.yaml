@@ -26,6 +26,7 @@ spec:
             - --keycloak-auth-url=https://{{HYPERAUTH}}/auth
             - --keycloak-client-id={{CLIENT_ID}}
             - --mc-mode={{MC_MODE}}
+            - --custom-product-name={{CUSTOM_PRODUCT_NAME}}
           image: tmaxcloudck/hypercloud-console:5.0.36.0
           imagePullPolicy: IfNotPresent
           ports:
