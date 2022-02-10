@@ -12,7 +12,7 @@
 * traefik ([traefik/traefik](https://hub.docker.com/r/library/traefik/tags))
 * hypercloud-console ([tmaxcloudck/hypercloud-console](https://hub.docker.com/r/tmaxcloudck/hypercloud-console/tags))
 * jwt-decode ([tmaxcloudck/jwd-decode](https://hub.docker.com/r/tmaxcloudck/jwt-decode/tags))
-* 가이드 작성 시점(2021/12/09) 최신 버전은 아래와 같습니다. 
+* 가이드 작성 시점(2022/02/10) 최신 버전은 아래와 같습니다. 
     * traefik:v2.5.4
     * hypercloud-console:5.0.51.0
     * jwt-decode:5.1.0.1
