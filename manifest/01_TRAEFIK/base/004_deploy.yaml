@@ -107,7 +107,10 @@ spec:
               readOnly: true
             - name: logs
               mountPath: /var/log/gateway
-      serviceAccountName: api-gateway
+            - name: api-gateway-token
+              mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+              readOnly: true
+#      serviceAccountName: api-gateway
       terminationGracePeriodSeconds: 60
       volumes:
         - name: configmap-volume
@@ -119,5 +122,9 @@ spec:
             secretName: tmaxcloud-gateway-selfsigned
         - name: logs
           emptyDir: {}
+        - name: api-gateway-token
+          secret:
+            defaultMode: 420
+            secretName: api-gateway-token
 #      imagePullSecrets:
 #        - name: regcred
