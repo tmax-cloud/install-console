@@ -13,6 +13,7 @@ spec:
       labels:
         app: jwt-decode-auth
     spec:
+      automountServiceAccountToken: false
       affinity:
         podAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -58,13 +59,13 @@ spec:
           - name: jwt-decode-auth
             protocol: TCP
             containerPort: 8080
-        volumeMounts:
-          - name: jwt-decode-token
-            mountPath: /var/run/secrets/kubernetes.io/serviceaccount
-            readOnly: true
+#        volumeMounts:
+#          - name: jwt-decode-token
+#            mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+#            readOnly: true
       #      serviceAccountName: console
-      volumes:
-        - name: jwt-decode-token
-          secret:
-            defaultMode: 420
-            secretName: jwt-decode-token
+#      volumes:
+#        - name: jwt-decode-token
+#          secret:
+#            defaultMode: 420
+#            secretName: jwt-decode-token
