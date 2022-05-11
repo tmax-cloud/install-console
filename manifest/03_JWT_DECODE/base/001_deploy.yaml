@@ -53,19 +53,20 @@ spec:
             value: "8080"
           - name: TOKEN_VALIDATED_HEADER_KEY
             value: jwt-token-validated
-        image: tmaxcloudck/jwt-decode:5.0.0.1
+          - name: MULTI_CLUSTER_PREFIX
+            value: multicluster
+        image: tmaxcloudck/jwt-decode:5.0.0.2
         imagePullPolicy: IfNotPresent
         ports:
           - name: jwt-decode-auth
             protocol: TCP
             containerPort: 8080
-#        volumeMounts:
-#          - name: jwt-decode-token
-#            mountPath: /var/run/secrets/kubernetes.io/serviceaccount
-#            readOnly: true
-      #      serviceAccountName: console
-#      volumes:
-#        - name: jwt-decode-token
-#          secret:
-#            defaultMode: 420
-#            secretName: jwt-decode-token
+        volumeMounts:
+          - name: jwt-decode-auth-token
+            mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+            readOnly: true
+      volumes:
+        - name: jwt-decode-auth-token
+          secret:
+            defaultMode: 420
+            secretName: jwt-decode-auth-token

@@ -1,6 +1,10 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+  - 000_sa.yaml
+  - 000_cr.yaml
+  - 000_crb.yaml
+  - 000_secret.yaml
   - 001_deploy.yaml
   - 002_service.yaml
   - 003_middlware_forward_auth.yaml
@@ -8,7 +12,7 @@ namespace: api-gateway-system
 images:
   - name: tmaxcloudck/jwt-decode
     newName: docker.io/tmaxcloudck/hypercloud-console
-    newTag: 5.0.0.1
+    newTag: 5.0.0.2
 commonLabels:
   app.kubernetes.io/managed-by: tmax-cloud
   app.kubernetes.io/component: jwt-decode

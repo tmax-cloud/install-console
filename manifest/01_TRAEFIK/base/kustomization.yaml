@@ -16,7 +16,7 @@ commonLabels:
 images:
 - name: tmaxcloudck/jwt-decode
   newName: docker.io/tmaxcloudck/jwt-decode
-  newTag: 5.0.0.1
+  newTag: 5.0.0.2
 - name: traefik
   newName: docker.io/library/traefik
   newTag: v2.5.4
