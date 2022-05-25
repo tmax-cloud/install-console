@@ -2,11 +2,21 @@
 # API-GATEWAY 설치 가이드
 
 ## Contents
+- [개요](#개요)
 - [구성 요소](#구성-요소)
 - [Prerequisites](#prerequisites)
 - [설치 가이드](#설치-방법)
 - [동작 확인](#동작-확인)
 - [설치 리소스 제거](#설치-리소스-제거)
+
+## 개요 
+* Hypercloud의 API-GATEWAY는 총 3개의 모듈로 구성되어 있다. 각 모듈의 역할은 다음과 같다. 
+   * traefik: kubernetes의 ingress-controller 역할과 TLS 인증서 제공, hypercloud의 API에 대한 단일 접속 포인트로 host와 url path를 기준으로 HTTP proxy를 담당한다. 
+   * hypercloud-console: react로 개발된 app을 제공하는 web-server 이다. 
+   * jwt-decode: traefik의 미들웨어로 동작하며, json web token(jwt) 검증을 담당한다.     
+* API-GATEWAY의 역할을 정리하면 다음과 같다. 
+   * 모든 API 호출을 받으며, 받은 HTTP 요청에 대한 JWT 검증, Host와 Path를 기준으로 Ingress 설정에 맞는 backend로 요청을 전달한다. 
+   * hypercloud UI를 제공한다. 
 
 ## 구성 요소
 * traefik ([traefik/traefik](https://hub.docker.com/r/library/traefik/tags))
